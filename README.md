@@ -1,76 +1,90 @@
-# Explicit Engineering Method (EEM)
+# Explicit Software Engineering Method (XSEM)
 
-Explicit Engineering Method (EEM) is a software engineering methodology focused on
-making intent, decisions, artifacts, and trade-offs explicit throughout the
-entire development lifecycle.
+Explicit Software Engineering Method (XSEM) is a software engineering methodology
+designed to make intent, decisions, artifacts, and trade-offs explicit and
+machine-interpretable across the entire software lifecycle.
 
-EEM is designed for professional software engineering teams who require rigor,
-traceability, and predictability, without falling into bureaucratic overhead or
-methodological dogma.
+XSEM is built on the premise that modern software engineering is already a
+formal, data-producing activity, and that a methodology that cannot be executed,
+measured, or analyzed by software is incomplete by design.
 
 ---
 
-## Why EEM Exists
+## Why XSEM Exists
 
-Many modern development teams operate without a true methodology.
+Many teams claim to follow a methodology, yet in practice:
 
-In practice:
-- Processes live in people’s heads.
-- Artifacts are optional or inconsistent.
+- Engineering decisions live in people’s heads.
+- Artifacts are optional, informal, or inconsistent.
 - Trade-offs are implicit and undocumented.
-- Failures are analyzed late, or not at all.
+- Failures are explained late, subjectively, or not at all.
 
-EEM exists to address this gap.
+This results in:
+- Fragile processes
+- Poor traceability
+- Inconsistent quality
+- Inability to learn systematically from mistakes
 
-It recovers the strengths of traditional engineering methodologies—explicit
-artifacts, lifecycle thinking, and traceability—while eliminating the manual
-ceremony that historically made such approaches heavy and fragile.
+XSEM exists to address this gap by treating software engineering as an explicit,
+observable, and analyzable system.
 
 ---
 
 ## Core Principles
 
-### 1. Engineering Must Be Explicit
+### 1. Explicitness as a First-Class Property
 
-Intent, assumptions, decisions, and constraints must be expressed as artifacts.
-What is not explicit cannot be analyzed, validated, or improved.
+All relevant aspects of engineering must be explicit:
+- Intent
+- Assumptions
+- Constraints
+- Decisions
+- Artifacts
+- Trade-offs
+
+What is not explicit cannot be reasoned about, automated, or improved.
 
 ---
 
-### 2. Methodology Is a System, Not a Checklist
+### 2. Engineering as a System of Compensating Variables
 
-EEM treats engineering as a system of interdependent variables.
+XSEM models the engineering process as a balanced system.
 
-Reducing rigor in one area requires reinforcement in others to maintain balance.
-For example:
-- Weak requirements demand stronger validation and testing.
+Reducing rigor in one dimension requires reinforcement in others to preserve
+overall quality and traceability.
+
+Examples:
+- Weak requirements demand stronger validation and stakeholder feedback.
 - Minimal upfront design requires increased refactoring discipline.
-- Reduced documentation requires richer feedback loops.
+- Reduced documentation requires richer testing and observability.
 
 There are no free shortcuts—only compensated trade-offs.
 
 ---
 
-### 3. Discipline Through Automation, Not Ceremony
+### 3. Automation Is a Consequence of Explicitness
 
-EEM is designed to be executable by software.
+XSEM is not “automation-first” by ideology.
 
-The methodology is enforced by systems and tooling rather than meetings,
-checklists, or human memory. This makes rigor lightweight and sustainable.
+Instead, automation emerges naturally from explicit artifacts, rules, and
+relationships. When engineering is explicit, it becomes machine-interpretable
+by design.
+
+This enables discipline enforced by systems rather than human ceremony.
 
 ---
 
 ### 4. Flexibility Without Methodological Anarchy
 
-EEM allows teams to adapt practices to their context.
+XSEM allows teams to adapt practices to their context.
 
 However, adaptation does not mean absence of method. Flexibility is constrained
-by explicit rules and compensations, ensuring consistency and comparability
-across teams and projects.
+by explicit rules, dependencies, and compensations that preserve consistency and
+comparability across teams and projects.
 
 ---
 
-### 5. Traceability Is Non-Negotiable
+### 5. Traceability Is Mandatory
 
 Every artifact, decision, and change must be traceable across the lifecycle.
 
@@ -79,38 +93,40 @@ Traceability enables:
 - Impact assessment
 - Objective evaluation of engineering quality
 - Evidence-based improvement
+- Accountability grounded in facts rather than perception
 
 ---
 
 ## Relationship with Divengine Studio
 
-EEM is authored and maintained independently.
+XSEM is authored and maintained independently.
 
-Divengine Studio is a software platform that implements and automates EEM,
+Divengine Studio is a software platform that implements and automates XSEM,
 executing the methodology as an operational system.
 
-The methodology exists independently of the tool, but is designed to be
-machine-executable.
+The methodology exists independently of any tool, but is intentionally designed
+to be executable by software.
 
 ---
 
-## Status
+## Scope and Status
 
-EEM is under active development.
+XSEM is under active development.
 
 This repository defines:
 - The conceptual foundations of the methodology
-- Its principles and constraints
-- The basis for automation and tooling support
+- Its guiding principles and constraints
+- The basis for automation and analysis
 
-Detailed specifications and formalization will evolve incrementally.
+Formal specifications, lifecycle models, and rule definitions will evolve
+incrementally through practical application.
 
 ---
 
 ## Author
 
-EEM is authored by **rafageist**.
+XSEM is authored by **rafageist**.
 
 The methodology reflects practical experience in software engineering,
-architecture, and systems design, and is intended to evolve through real-world
-application rather than theoretical prescription.
+architecture, and systems design, and prioritizes real-world applicability
+over theoretical purity.

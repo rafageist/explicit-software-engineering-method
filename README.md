@@ -1,16 +1,16 @@
-# Explicit Software Engineering Method (XSEM)
+# Explicit Software Engineering Method 
 
-Explicit Software Engineering Method (XSEM) is a software engineering methodology
+Explicit Software Engineering Method is a software engineering methodology
 designed to make intent, decisions, artifacts, and trade-offs explicit and
 machine-interpretable across the entire software lifecycle.
 
-XSEM is built on the premise that modern software engineering is already a
+This methodology is built on the premise that modern software engineering is already a
 formal, data-producing activity, and that a methodology that cannot be executed,
 measured, or analyzed by software is incomplete by design.
 
 ---
 
-## Why XSEM Exists
+## Why this methodology exists
 
 Many teams claim to follow a methodology, yet in practice:
 
@@ -25,7 +25,7 @@ This results in:
 - Inconsistent quality
 - Inability to learn systematically from mistakes
 
-XSEM exists to address this gap by treating software engineering as an explicit,
+This methodology exists to address this gap by treating software engineering as an explicit,
 observable, and analyzable system.
 
 ---
@@ -48,7 +48,7 @@ What is not explicit cannot be reasoned about, automated, or improved.
 
 ### 2. Engineering as a System of Compensating Variables
 
-XSEM models the engineering process as a balanced system.
+This methodology models the engineering process as a balanced system.
 
 Reducing rigor in one dimension requires reinforcement in others to preserve
 overall quality and traceability.
@@ -64,7 +64,7 @@ There are no free shortcuts—only compensated trade-offs.
 
 ### 3. Automation Is a Consequence of Explicitness
 
-XSEM is not “automation-first” by ideology.
+This methodology is not “automation-first” by ideology.
 
 Instead, automation emerges naturally from explicit artifacts, rules, and
 relationships. When engineering is explicit, it becomes machine-interpretable
@@ -76,7 +76,7 @@ This enables discipline enforced by systems rather than human ceremony.
 
 ### 4. Flexibility Without Methodological Anarchy
 
-XSEM allows teams to adapt practices to their context.
+This methodology allows teams to adapt practices to their context.
 
 However, adaptation does not mean absence of method. Flexibility is constrained
 by explicit rules, dependencies, and compensations that preserve consistency and
@@ -99,9 +99,9 @@ Traceability enables:
 
 ## Relationship with Divengine Studio
 
-XSEM is authored and maintained independently.
+This methodology is authored and maintained independently.
 
-Divengine Studio is a software platform that implements and automates XSEM,
+Divengine Studio is a software platform that implements and automates this methodology,
 executing the methodology as an operational system.
 
 The methodology exists independently of any tool, but is intentionally designed
@@ -111,7 +111,7 @@ to be executable by software.
 
 ## Scope and Status
 
-XSEM is under active development.
+This methodology is under active development.
 
 This repository defines:
 - The conceptual foundations of the methodology
@@ -125,7 +125,7 @@ incrementally through practical application.
 
 ## Author
 
-XSEM is authored by **rafageist**.
+This methodology is authored by **@rafageist**.
 
 The methodology reflects practical experience in software engineering,
 architecture, and systems design, and prioritizes real-world applicability

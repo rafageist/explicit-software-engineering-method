@@ -12,8 +12,9 @@ ROOT = Path(__file__).resolve().parents[1]
 TITLE = "Explicit Software Engineering Method"
 AUTHOR = "Rafael Rodríguez Ramírez"
 
+INDEX_FILE = "00-index.md"
+
 CHAPTERS = [
-    "00-index.md",
     "prologue.md",
     "1-why-a-method.md",
     "2-from-software-to-product.md",
@@ -53,7 +54,7 @@ def sanitize_version(version: str) -> str:
 
 def generate_index() -> None:
     lines = ["# Index", ""]
-    for chapter in CHAPTERS[1:]:
+    for chapter in CHAPTERS:
         path = ROOT / chapter
         text = path.read_text(encoding="utf-8")
         for line in text.splitlines():
@@ -69,7 +70,7 @@ def generate_index() -> None:
             else:
                 lines.append(f"{indent}- {title}")
         lines.append("")
-    (ROOT / "00-index.md").write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    (ROOT / INDEX_FILE).write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
 def build_pdf() -> None:

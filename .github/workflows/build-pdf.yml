@@ -29,6 +29,9 @@ jobs:
       - name: Install Mermaid CLI
         run: npm install -g @mermaid-js/mermaid-cli
 
+      - name: Allow Mermaid CLI sandbox workaround
+        run: chmod +x scripts/mmdc-wrapper.sh
+
       - name: Install Pandoc and LaTeX
         run: |
           sudo apt-get update

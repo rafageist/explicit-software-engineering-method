@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,7 +95,11 @@ def build_pdf() -> None:
     ] + [str(ROOT / chapter) for chapter in CHAPTERS]
 
     env = os.environ.copy()
-    env.setdefault("MERMAID_BIN", "mmdc")
+    if "MERMAID_BIN" not in env:
+        wrapper = (
+            ROOT / "scripts" / ("mmdc-wrapper.cmd" if sys.platform.startswith("win") else "mmdc-wrapper.sh")
+        )
+        env["MERMAID_BIN"] = str(wrapper)
     subprocess.run(cmd, check=True, env=env)
 
 

@@ -1,5 +1,12 @@
 # Index
 
+- [Prologue - Context and Motivation](prologue.md)
+  - Situation
+  - Problem Statement
+  - Hypothesis
+  - Objective
+  - Scope and Non-Objectives
+
 - [1. Why This Is a Method](1-why-a-method.md)
   - 1.1 Methodology vs Method vs Process
   - 1.2 Why "Method" Fits

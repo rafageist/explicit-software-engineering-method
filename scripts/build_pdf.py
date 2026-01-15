@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 CHAPTERS = [
     "00-index.md",
+    "prologue.md",
     "1-why-a-method.md",
     "2-from-software-to-product.md",
     "3-normative-rules.md",

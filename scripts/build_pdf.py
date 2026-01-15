@@ -21,6 +21,30 @@ CHAPTERS = [
 HEADING_RE = re.compile(r"^(#{1,3})\s+(.*)$")
 
 
+def read_manifest_version() -> str:
+    manifest_path = ROOT / "manifest.yaml"
+    if not manifest_path.is_file():
+        raise FileNotFoundError("manifest.yaml is missing. Add a version field.")
+
+    for raw_line in manifest_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#"):
+            continue
+        if line.lower().startswith("version:"):
+            value = line.split(":", 1)[1].strip()
+            if (value.startswith('"') and value.endswith('"')) or (
+                value.startswith("'") and value.endswith("'")
+            ):
+                value = value[1:-1]
+            if value:
+                return value
+    raise ValueError("manifest.yaml is missing a valid version field.")
+
+
+def sanitize_version(version: str) -> str:
+    return "".join(ch if (ch.isalnum() or ch in "._-") else "_" for ch in version)
+
+
 def generate_index() -> None:
     lines = ["# Index", ""]
     for chapter in CHAPTERS[1:]:
@@ -45,13 +69,14 @@ def generate_index() -> None:
 def build_pdf() -> None:
     output_dir = ROOT / "build"
     output_dir.mkdir(exist_ok=True)
-    output_pdf = output_dir / "Explicit-Software-Engineering-Method.pdf"
+    version = sanitize_version(read_manifest_version())
+    output_pdf = output_dir / f"Explicit-Software-Engineering-Method_{version}.pdf"
     header_tex = ROOT / "scripts" / "pandoc-header.tex"
 
     cmd = [
         "pandoc",
         "--from",
-        "gfm",
+        "gfm+tex_math_dollars",
         "--standalone",
         "--toc",
         "--toc-depth=3",
@@ -61,7 +86,7 @@ def build_pdf() -> None:
         "--include-in-header",
         str(header_tex),
         "--filter",
-        "mermaid-filter",
+        "pandoc-mermaid",
         "--resource-path",
         str(ROOT),
         "-o",
@@ -69,7 +94,7 @@ def build_pdf() -> None:
     ] + [str(ROOT / chapter) for chapter in CHAPTERS]
 
     env = os.environ.copy()
-    env.setdefault("MERMAID_FILTER_FORMAT", "png")
+    env.setdefault("MERMAID_BIN", "mmdc")
     subprocess.run(cmd, check=True, env=env)
 
 

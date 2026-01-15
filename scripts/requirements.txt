@@ -1,1 +1,1 @@
-mermaid-filter
+pandoc-mermaid-filter

@@ -1,3 +1,30 @@
-% Pandoc header for math rendering in PDFs.
+% Pandoc header for math rendering in PDFs and document styling.
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=14pt,headsep=0.5cm]{geometry}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\makeatletter
+\fancyhead[L]{\small \@title}
+\fancyhead[C]{\small \@author}
+\fancyhead[R]{\small \@date}
+\makeatother
+\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\makeatletter
+\renewcommand{\maketitle}{
+  \begin{titlepage}
+    \centering
+    \vspace*{0.35\textheight}
+    {\LARGE\bfseries \@title\par}
+    \vspace{1cm}
+    {\large \@author\par}
+    \vspace{0.5cm}
+    {\large \@date\par}
+  \end{titlepage}
+}
+\makeatother

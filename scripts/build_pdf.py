@@ -4,9 +4,13 @@ import os
 import re
 import subprocess
 import sys
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+TITLE = "Explicit Software Engineering Method"
+AUTHOR = "Rafael Rodríguez Ramírez"
 
 CHAPTERS = [
     "00-index.md",
@@ -75,6 +79,7 @@ def build_pdf() -> None:
     output_pdf = output_dir / f"Explicit-Software-Engineering-Method_{version}.pdf"
     header_tex = ROOT / "scripts" / "pandoc-header.tex"
 
+    today = date.today().isoformat()
     cmd = [
         "pandoc",
         "--from",
@@ -84,7 +89,11 @@ def build_pdf() -> None:
         "--toc-depth=3",
         "--pdf-engine=xelatex",
         "--metadata",
-        "title=Explicit Software Engineering Method",
+        f"title={TITLE}",
+        "--metadata",
+        f"author={AUTHOR}",
+        "--metadata",
+        f"date={today}",
         "--include-in-header",
         str(header_tex),
         "--filter",

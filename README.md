@@ -1,132 +1,64 @@
-# Explicit Software Engineering Method 
+The Explicit Software Engineering Method is a prescriptive set of rules that defines what engineering work must be made explicit, how artifacts must relate to intent and decisions, and how absences must be compensated, in order for software to qualify as an engineered product rather than incidental functionality. It operates orthogonally to process frameworks by constraining what must be traceable and validated regardless of workflow sequence, accepting contextual parameters that shape the required level of explicitness without imposing a fixed lifecycle. The method transforms failure from narrative into evidence-based diagnosis by making intent, decisions, assumptions, trade-offs, and validation explicit and navigable, enabling systematic quality assessment and cumulative learning. By defining obligations and their consequences rather than activities, the method ensures that engineering reasoning is preserved as analyzable infrastructure across any development process. It exists to bridge the gap between software as executable output and software product as accountable engineering outcome.
 
-Explicit Software Engineering Method is a software engineering methodology
-designed to make intent, decisions, artifacts, and trade-offs explicit and
-machine-interpretable across the entire software lifecycle.
+This definition is normative.
 
-This methodology is built on the premise that modern software engineering is already a
-formal, data-producing activity, and that a methodology that cannot be executed,
-measured, or analyzed by software is incomplete by design.
+# Explicit Software Engineering Method
 
----
+## 1. Overview
+The Explicit Software Engineering Method defines a minimal, executable set of rules for making engineering intent, decisions, and trade-offs explicit and traceable across the software lifecycle.
+It addresses a structural problem: critical engineering work often remains implicit, leaving quality, accountability, and learning dependent on tacit knowledge rather than evidence.
+Implicitness is structural because delivery pressure and tooling defaults reward output over explicit reasoning, so implicit work accumulates unless a method enforces explicitness.
 
-## Why this methodology exists
+## 2. What This Is Not
+- Not a project management framework
+- Not a development methodology
+- Not a rigid process
+- Not a replacement for existing tools
 
-Many teams claim to follow a methodology, yet in practice:
+## 3. Method vs Methodology vs Process
+- Method: a prescriptive, executable way of working defined by explicit artifacts, rules, and constraints; it is parameterizable and analyzable.
+- Methodology: the study and justification of methods; it explains why methods are chosen and under which assumptions they hold.
+- Process: an ordered sequence of activities or phases; it can be implemented by, or combined with, a method.
 
-- Engineering decisions live in people’s heads.
-- Artifacts are optional, informal, or inconsistent.
-- Trade-offs are implicit and undocumented.
-- Failures are explained late, subjectively, or not at all.
+This work is a method because it defines explicit artifacts and relationships that can be instantiated, checked, and analyzed, while remaining adaptable through parameters.
 
-This results in:
-- Fragile processes
-- Poor traceability
-- Inconsistent quality
-- Inability to learn systematically from mistakes
+## 4. Core Principle: Explicit vs Implicit Engineering
+Implicit engineering work is real work that remains undocumented or unstructured: decisions, assumptions, and trade-offs exist but are not recorded as artifacts.
+Explicit engineering work captures those elements as traceable artifacts with stated intent and validation.
+Explicitness enables quality, traceability, and learning because the work can be inspected, validated, and improved with evidence instead of memory.
 
-This methodology exists to address this gap by treating software engineering as an explicit,
-observable, and analyzable system.
+## 5. Core Concepts
+- Intent: the desired outcome or property a system or change must achieve, with stated scope.
+- Artifact: a produced, versioned work product that can be inspected and validated.
+- Decision: a committed choice among alternatives with rationale and consequences.
+- Assumption: a statement treated as true for reasoning or planning until validated or disproven.
+- Trade-off: a deliberate balance between competing constraints or quality attributes.
+- Validation: evidence that an artifact or decision satisfies its stated intent.
+- Traceability: explicit, navigable links among intents, decisions, assumptions, artifacts, and validations.
+- Compensation: explicit documentation of missing artifacts or validations with stated accepted risk.
 
----
+## 6. Method as Infrastructure
+The method treats engineering as infrastructure: it defines enforceable rules about what must be explicit, how artifacts relate, and how gaps are compensated.
+Because the rules are explicit, the method supports systematic checks, compensations, and analysis of engineering quality and risk.
 
-## Core Principles
+## 7. Parameters and Balance
+The method accepts contextual parameters (domain criticality, risk tolerance, regulatory demands, team scale) that shape how much explicitness is required.
+Explicitness, effort, and risk are balanced rather than maximized; quality is optimized for context, not for maximal rigor.
 
-### 1. Explicitness as a First-Class Property
+## 8. Relationship to Standards
+The method is compatible with IEEE and ISO software engineering process standards.
+Standards define required activities and work products; this method defines how those activities and products become explicit, traceable, and analyzable in execution.
+Process frameworks can host the method, but the method specifies the rules that make execution verifiable.
 
-All relevant aspects of engineering must be explicit:
-- Intent
-- Assumptions
-- Constraints
-- Decisions
-- Artifacts
-- Trade-offs
+## 9. Expected Outcomes
+- Improves: clarity of intent, consistency of artifacts, objective assessment of engineering quality, and reuse of knowledge across projects.
+- Diagnosable failures: missing assumptions, invalid decisions, unvalidated artifacts, and unbalanced trade-offs become observable causes rather than after-the-fact narratives.
+- Newly visible: rationale, risk exposure, and the actual cost of shortcuts that were previously implicit.
 
-What is not explicit cannot be reasoned about, automated, or improved.
+## 10. Scope and Evolution
+The current scope defines the minimal concepts, explicitness rules, and traceability needed to make engineering work analyzable.
+The method is intentionally minimal at this stage and does not prescribe a full lifecycle model.
+Tooling (for example, Divengine Studio) is an implementation of the method, not the method itself.
 
----
-
-### 2. Engineering as a System of Compensating Variables
-
-This methodology models the engineering process as a balanced system.
-
-Reducing rigor in one dimension requires reinforcement in others to preserve
-overall quality and traceability.
-
-Examples:
-- Weak requirements demand stronger validation and stakeholder feedback.
-- Minimal upfront design requires increased refactoring discipline.
-- Reduced documentation requires richer testing and observability.
-
-There are no free shortcuts—only compensated trade-offs.
-
----
-
-### 3. Automation Is a Consequence of Explicitness
-
-This methodology is not “automation-first” by ideology.
-
-Instead, automation emerges naturally from explicit artifacts, rules, and
-relationships. When engineering is explicit, it becomes machine-interpretable
-by design.
-
-This enables discipline enforced by systems rather than human ceremony.
-
----
-
-### 4. Flexibility Without Methodological Anarchy
-
-This methodology allows teams to adapt practices to their context.
-
-However, adaptation does not mean absence of method. Flexibility is constrained
-by explicit rules, dependencies, and compensations that preserve consistency and
-comparability across teams and projects.
-
----
-
-### 5. Traceability Is Mandatory
-
-Every artifact, decision, and change must be traceable across the lifecycle.
-
-Traceability enables:
-- Root-cause analysis
-- Impact assessment
-- Objective evaluation of engineering quality
-- Evidence-based improvement
-- Accountability grounded in facts rather than perception
-
----
-
-## Relationship with Divengine Studio
-
-This methodology is authored and maintained independently.
-
-Divengine Studio is a software platform that implements and automates this methodology,
-executing the methodology as an operational system.
-
-The methodology exists independently of any tool, but is intentionally designed
-to be executable by software.
-
----
-
-## Scope and Status
-
-This methodology is under active development.
-
-This repository defines:
-- The conceptual foundations of the methodology
-- Its guiding principles and constraints
-- The basis for automation and analysis
-
-Formal specifications, lifecycle models, and rule definitions will evolve
-incrementally through practical application.
-
----
-
-## Author
-
-This methodology is authored by **@rafageist**.
-
-The methodology reflects practical experience in software engineering,
-architecture, and systems design, and prioritizes real-world applicability
-over theoretical purity.
+## 11. Normative Core Rules (Draft)
+See `3-normative-rules.md`.

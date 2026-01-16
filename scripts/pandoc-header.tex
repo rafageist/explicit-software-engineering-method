@@ -17,7 +17,16 @@
 \renewcommand{\footrulewidth}{0pt}
 \apptocmd{\tableofcontents}{\newpage}{}{}
 \makeatletter
-\pretocmd{\section}{\ifnum\value{section}>0\clearpage\fi}{}{}
+\let\oldsection\section
+\newif\iffirstsection
+\firstsectiontrue
+\renewcommand{\section}{%
+  \iffirstsection
+    \firstsectionfalse
+  \else
+    \clearpage
+  \fi
+  \oldsection}
 \makeatother
 
 \makeatletter

@@ -8,7 +8,7 @@ Failures are common and difficult to diagnose objectively. Post-failure explanat
 
 ## 0.2 Problem Statement
 
-The core problem is the absence of explicit, enforceable representation of engineering reasoning. Intent, decisions, assumptions, trade-offs, and validation rationale remain implicit or informally captured, which prevents objective evaluation, diagnosis, and learning.
+The situation above leads directly to a single core problem: the absence of explicit, enforceable representation of engineering reasoning. Intent, decisions, assumptions, trade-offs, and validation rationale remain implicit or informally captured, which prevents objective evaluation, diagnosis, and learning.
 
 This is not a problem of missing processes or tools. Processes coordinate work, but they do not make engineering reasoning accountable on their own.
 
@@ -19,7 +19,7 @@ The consequences of implicit reasoning include:
 
 ## 0.3 Hypothesis
 
-If engineering reasoning is made explicit and enforceable, independent of process or workflow, then software outcomes can be evaluated as engineered products and failures can be diagnosed with accountability rather than narrative.
+Given the core problem, the hypothesis follows: if engineering reasoning is made explicit and enforceable, independent of process or workflow, then software outcomes can be evaluated as engineered products and failures can be diagnosed with accountability rather than narrative.
 
 ## 0.4 Objective
 
@@ -30,3 +30,5 @@ The objective is to define a minimal, normative, process-orthogonal method that 
 This work does not attempt to replace organizational planning, coordination, or delivery practices. It distinguishes engineering accountability from organizational planning and addresses only the former.
 
 Uncertainty and subjectivity are not eliminated; they are made explicit and preserved as part of the engineering record.
+
+This problem cannot be solved by adding more processes or tools. It requires a different kind of intervention, which motivates the choice of a method as the next step.

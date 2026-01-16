@@ -2,12 +2,12 @@
 
 - [Prologue - Context and Motivation](prologue.md)
 
-- [The Problem](the-problem.md)
-  - Situation
-  - Problem Statement
-  - Hypothesis
-  - Objective
-  - Scope and Non-Objectives
+- [0. The Problem](the-problem.md)
+  - 0.1 Situation
+  - 0.2 Problem Statement
+  - 0.3 Hypothesis
+  - 0.4 Objective
+  - 0.5 Scope and Non-Objectives
 
 - [1. Why This Is a Method](1-why-a-method.md)
   - 1.1 Methodology vs Method vs Process

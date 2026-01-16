@@ -1,48 +1,32 @@
-# The Problem
+# 0. The Problem
 
-## Situation
+## 0.1 Situation
 
-Despite decades of progress in software development practices, tools, and organizational frameworks, the software industry continues to exhibit a persistent pattern: systems are frequently delivered that function, yet fail to qualify as accountable engineering products.
+Software development practice has matured in tooling, coordination, and delivery discipline, yet a persistent gap remains. Systems are often delivered that function, but they do not qualify as accountable engineering products because the reasoning that shaped them is not preserved.
 
-When software systems fail, whether due to defects, scalability limits, architectural rigidity, or unmet expectations, the root causes are rarely diagnosable through objective engineering evidence. Instead, failures are explained through narratives, retrospective opinions, or process adjustments, rather than through traceable reasoning artifacts.
+Failures are common and difficult to diagnose objectively. Post-failure explanations tend to rely on narrative rather than evidence, even in organizations that adopt recognized standards, agile frameworks, and best practices.
 
-This situation persists across organizations of all sizes and maturity levels, including those formally adopting recognized standards, agile frameworks, or best practices.
+## 0.2 Problem Statement
 
-## Problem Statement
+The core problem is the absence of explicit, enforceable representation of engineering reasoning. Intent, decisions, assumptions, trade-offs, and validation rationale remain implicit or informally captured, which prevents objective evaluation, diagnosis, and learning.
 
-The core problem addressed by this work is not the absence of development processes or methodologies, but the absence of explicit, enforceable representation of engineering reasoning.
+This is not a problem of missing processes or tools. Processes coordinate work, but they do not make engineering reasoning accountable on their own.
 
-Most software engineering work - intent, decisions, assumptions, trade-offs, and validation rationale - remains implicit, undocumented, or informally captured. As a result:
+The consequences of implicit reasoning include:
+- decisions that cannot be evaluated post hoc
+- failures that cannot be diagnosed in engineering terms
+- learning that remains episodic rather than cumulative
 
-- Engineering decisions cannot be objectively evaluated post hoc.
-- Failures cannot be systematically diagnosed in engineering terms.
-- Software products cannot be distinguished from incidental or ad-hoc implementations.
-- Learning is episodic rather than cumulative.
+## 0.3 Hypothesis
 
-Existing processes and frameworks organize work, but do not govern the explicitness or accountability of engineering reasoning itself.
+If engineering reasoning is made explicit and enforceable, independent of process or workflow, then software outcomes can be evaluated as engineered products and failures can be diagnosed with accountability rather than narrative.
 
-## Hypothesis
+## 0.4 Objective
 
-This work is based on the following hypothesis:
+The objective is to define a minimal, normative, process-orthogonal method that specifies obligations and consequences and makes engineering work objectively evaluable.
 
-> If software engineering reasoning is made explicit, traceable, and normatively constrained, independently of development process or workflow, then software outcomes can be treated as engineered products rather than incidental results, and failures can be diagnosed systematically rather than narratively.
+## 0.5 Scope and Non-Objectives
 
-## Objective
+This work does not attempt to replace organizational planning, coordination, or delivery practices. It distinguishes engineering accountability from organizational planning and addresses only the former.
 
-The objective of this work is to define a minimal, process-orthogonal, normative method that:
-
-- Specifies what engineering reasoning must be made explicit
-- Defines obligations and consequences independent of activity sequencing
-- Enables objective assessment of engineering completeness and quality
-- Preserves contextual flexibility without sacrificing accountability
-- Transforms software failure into diagnosable engineering evidence
-
-## Scope and Non-Objectives
-
-This method does not aim to:
-
-- Prescribe or replace development processes, frameworks, or methodologies
-- Guarantee successful software outcomes
-- Eliminate uncertainty, subjectivity, or exploration
-
-Instead, it aims to ensure that uncertainty, subjectivity, and exploration are explicitly represented, traceable, and analyzable as part of the engineering record.
+Uncertainty and subjectivity are not eliminated; they are made explicit and preserved as part of the engineering record.

@@ -12,7 +12,7 @@ Consider a data pipeline that has grown through urgent fixes. It produces correc
 
 By contrast, a customer-facing service may behave within defined constraints, and when a latency regression appears, the team can trace the change to a specific decision and the condition it was meant to satisfy. The service still fails in real conditions, but the failure is diagnosable as an engineering outcome.
 
-The distinction is not about size, polish, or commercial packaging. It is about engineering accountability.
+The distinction is not about size, polish, performance targets, or bug counts. It is about engineering accountability.
 
 ---
 
@@ -20,17 +20,23 @@ The distinction is not about size, polish, or commercial packaging. It is about 
 
 Engineering introduces structure between problem and solution. A product is not defined by having more features or fewer bugs; it is defined by the visibility and accountability of the reasoning that shaped it. This is why a prototype can be valid software while still not qualifying as a product: it may demonstrate behavior without preserving the engineering reasoning behind it.
 
+Once accountability exists, diagnosability becomes a property of the product rather than a consequence of who remembers the history.
+
 ---
 
 ## 2.3 Products Are Diagnosable; Code Alone Is Not
 
 A defining property of an engineered product is diagnosability. Success in production does not retroactively create engineering accountability; it only shows that the system is currently acceptable. When failures occur, an engineered product allows the team to explain the failure in terms of the reasoning that led to the behavior, rather than relying on retrospective narrative or individual recollection.
 
+This distinction explains why organization alone cannot close the gap.
+
 ---
 
 ## 2.4 Process Does Not Create Products by Itself
 
 Processes coordinate activities. They do not guarantee that engineering reasoning is preserved. A team can follow a well-defined process and still produce software whose behavior cannot be explained beyond surface defects. This is not a critique of process; it is a recognition that organization and accountability are distinct concerns.
+
+The difference is structural, which is why it requires an explicit mechanism.
 
 ---
 

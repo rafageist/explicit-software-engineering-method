@@ -1,48 +1,11 @@
 # Prologue - Context and Motivation
 
-## Situation
+Most engineers have seen systems that work and still feel fragile. Things compile, deploy, and pass tests, yet the codebase seems to depend on a handful of unwritten decisions and fragile expectations. Changes land with confidence, until they do not, and the reason is hard to state without reconstructing the past from memory.
 
-Despite decades of progress in software development practices, tools, and organizational frameworks, the software industry continues to exhibit a persistent pattern: systems are frequently delivered that function, yet fail to qualify as accountable engineering products.
+Many of the most consequential decisions are made under pressure. They solve real constraints, but later those choices become invisible. The system carries them forward, while the people who made them move on, and the reasoning fades. When failures happen, the explanations often sound like stories: who was in the room, which deadline mattered, what seemed reasonable at the time.
 
-When software systems fail—whether due to defects, scalability limits, architectural rigidity, or unmet expectations—the root causes are rarely diagnosable through objective engineering evidence. Instead, failures are explained through narratives, retrospective opinions, or process adjustments, rather than through traceable reasoning artifacts.
+Software development looks mature from the outside. We have reliable tooling, experienced teams, and established processes. Yet the engineering reasoning that produced the system often remains implicit. The process is visible; the accountability of the reasoning is not. Something important was never written down, and we feel it most when the system is stressed.
 
-This situation persists across organizations of all sizes and maturity levels, including those formally adopting recognized standards, agile frameworks, or best practices.
+This is not a problem of effort or intelligence. It is a problem of visibility. The work is real, but the reasoning behind it disappears. Without a way to preserve that reasoning, we lose our ability to understand failures as engineering outcomes rather than as narrative justifications.
 
-## Problem Statement
-
-The core problem addressed by this work is not the absence of development processes or methodologies, but the absence of explicit, enforceable representation of engineering reasoning.
-
-Most software engineering work—intent, decisions, assumptions, trade-offs, and validation rationale—remains implicit, undocumented, or informally captured. As a result:
-
-- Engineering decisions cannot be objectively evaluated post hoc.
-- Failures cannot be systematically diagnosed in engineering terms.
-- Software products cannot be distinguished from incidental or ad-hoc implementations.
-- Learning is episodic rather than cumulative.
-
-Existing processes and frameworks organize work, but do not govern the explicitness or accountability of engineering reasoning itself.
-
-## Hypothesis
-
-This work is based on the following hypothesis:
-
-> If software engineering reasoning is made explicit, traceable, and normatively constrained—independently of development process or workflow—then software outcomes can be treated as engineered products rather than incidental results, and failures can be diagnosed systematically rather than narratively.
-
-## Objective
-
-The objective of this work is to define a minimal, process-orthogonal, normative method that:
-
-- Specifies what engineering reasoning must be made explicit
-- Defines obligations and consequences independent of activity sequencing
-- Enables objective assessment of engineering completeness and quality
-- Preserves contextual flexibility without sacrificing accountability
-- Transforms software failure into diagnosable engineering evidence
-
-## Scope and Non-Objectives
-
-This method does not aim to:
-
-- Prescribe or replace development processes, frameworks, or methodologies
-- Guarantee successful software outcomes
-- Eliminate uncertainty, subjectivity, or exploration
-
-Instead, it aims to ensure that uncertainty, subjectivity, and exploration are explicitly represented, traceable, and analyzable as part of the engineering record.
+The method described here is a response to that gap. It aims to make engineering work explicit, to preserve reasoning over time, and to make failures understandable in technical terms. It is not a process or a framework. It is a method, offered to those who recognize the problem and want a more accountable way forward.

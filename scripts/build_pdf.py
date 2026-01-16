@@ -16,6 +16,7 @@ INDEX_FILE = "00-index.md"
 
 CHAPTERS = [
     "prologue.md",
+    "the-problem.md",
     "1-why-a-method.md",
     "2-from-software-to-product.md",
     "3-normative-rules.md",

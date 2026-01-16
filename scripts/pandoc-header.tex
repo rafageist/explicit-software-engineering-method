@@ -2,6 +2,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=14pt,headsep=0.5cm]{geometry}
+\usepackage{etoolbox}
 \usepackage{fancyhdr}
 
 \pagestyle{fancy}
@@ -14,6 +15,10 @@
 \fancyfoot[C]{\thepage}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
+\apptocmd{\tableofcontents}{\newpage}{}{}
+\makeatletter
+\pretocmd{\section}{\ifnum\value{section}>0\clearpage\fi}{}{}
+\makeatother
 
 \makeatletter
 \renewcommand{\maketitle}{

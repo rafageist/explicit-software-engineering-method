@@ -1,6 +1,8 @@
 # Index
 
 - [Prologue - Context and Motivation](prologue.md)
+
+- [The Problem](the-problem.md)
   - Situation
   - Problem Statement
   - Hypothesis

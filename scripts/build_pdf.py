@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -13,7 +14,7 @@ TITLE = "Explicit Software Engineering Method"
 AUTHOR = "Rafael Rodríguez Ramírez"
 SUBTITLE = "A normative method for engineering accountability, traceability, and diagnosable failure"
 
-COVER_FILE = "00-cover.md"
+COVER_TEMPLATE = "00-cover.html"
 CONTENTS_FILE = "00-contents.md"
 INDEX_FILE = "00-index.md"
 
@@ -29,7 +30,7 @@ CHAPTERS = [
     "7-formalization.md",
     "glossary.md",
 ]
-PDF_CHAPTERS = [COVER_FILE, CONTENTS_FILE] + CHAPTERS
+PDF_CHAPTERS = [CONTENTS_FILE] + CHAPTERS
 
 HEADING_RE = re.compile(r"^(#{1,3})\s+(.*)$")
 
@@ -79,39 +80,90 @@ def generate_index() -> None:
     (ROOT / INDEX_FILE).write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
-def generate_cover(version: str, generated_at: str) -> None:
-    lines = [
-        r"\thispagestyle{empty}",
-        r"\noindent\colorbox{Navy}{\parbox{\textwidth}{\rule{0pt}{1.4cm}}}",
-        r"\vspace{1cm}",
-        r"\begingroup",
-        r"\centering",
-        f"{{\\LARGE\\bfseries {TITLE}\\par}}",
-        r"\vspace{0.35cm}",
-        f"{{\\Large\\bfseries Version {version}\\par}}",
-        r"\vspace{0.25cm}",
-        f"{{\\normalsize {SUBTITLE}\\par}}",
-        r"\vspace{0.9cm}",
-        "",
-        "```mermaid",
-        "flowchart TB",
-        "    I[Intent] --> D[Decision]",
-        "    D --> A[Artifact]",
-        "    A --> V[Validation]",
-        "    V -.-> I",
-        "```",
-        "",
-        r"\vspace{0.9cm}",
-        f"{{\\normalsize {AUTHOR}\\par}}",
-        r"\vspace{0.2cm}",
-        f"{{\\small Generated: {generated_at}\\par}}",
-        r"\endgroup",
-        r"\vfill",
-        r"\noindent\colorbox{CoolGray}{\parbox{\textwidth}{\rule{0pt}{0.7cm}}}",
-        r"\newpage",
-        "",
-    ]
-    (ROOT / COVER_FILE).write_text("\n".join(lines), encoding="utf-8")
+def require_command(command: str) -> None:
+    if shutil.which(command) is None:
+        raise FileNotFoundError(f"Required command not found: {command}")
+
+
+def mermaid_binary(env: dict[str, str]) -> str:
+    if "MERMAID_BIN" in env:
+        return env["MERMAID_BIN"]
+    wrapper = ROOT / "scripts" / ("mmdc-wrapper.cmd" if sys.platform.startswith("win") else "mmdc-wrapper.sh")
+    env["MERMAID_BIN"] = str(wrapper)
+    return env["MERMAID_BIN"]
+
+
+def render_cover_diagram(output_dir: Path, env: dict[str, str]) -> Path:
+    diagram_mmd = output_dir / "cover-diagram.mmd"
+    diagram_png = output_dir / "cover-diagram.png"
+    diagram_mmd.write_text(
+        "\n".join(
+            [
+                "flowchart TB",
+                "    I[Intent] --> D[Decision]",
+                "    D --> A[Artifact]",
+                "    A --> V[Validation]",
+                "    V -.-> I",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    mermaid_bin = mermaid_binary(env)
+    subprocess.run(
+        [mermaid_bin, "-i", str(diagram_mmd), "-o", str(diagram_png), "-b", "transparent"],
+        check=True,
+        env=env,
+    )
+    return diagram_png
+
+
+def generate_cover_html(
+    version: str,
+    generated_at: str,
+    diagram_path: Path,
+    output_path: Path,
+) -> None:
+    template = (ROOT / COVER_TEMPLATE).read_text(encoding="utf-8")
+    html = (
+        template.replace("{{TITLE}}", TITLE)
+        .replace("{{VERSION}}", version)
+        .replace("{{SUBTITLE}}", SUBTITLE)
+        .replace("{{AUTHOR}}", AUTHOR)
+        .replace("{{GENERATED_AT}}", generated_at)
+        .replace("{{DIAGRAM_SRC}}", diagram_path.name)
+    )
+    output_path.write_text(html, encoding="utf-8")
+
+
+def render_cover_pdf(html_path: Path, output_pdf: Path) -> None:
+    require_command("wkhtmltopdf")
+    subprocess.run(
+        [
+            "wkhtmltopdf",
+            "--page-size",
+            "A4",
+            "--margin-top",
+            "0",
+            "--margin-right",
+            "0",
+            "--margin-bottom",
+            "0",
+            "--margin-left",
+            "0",
+            "--enable-local-file-access",
+            str(html_path),
+            str(output_pdf),
+        ],
+        check=True,
+    )
+
+
+def write_cover_include_tex(output_path: Path, cover_pdf: Path) -> None:
+    output_path.write_text(
+        f"\\includepdf[pages=1,pagecommand={{\\thispagestyle{{empty}}}}]{{{cover_pdf.as_posix()}}}\n",
+        encoding="utf-8",
+    )
 
 
 def build_pdf() -> None:
@@ -123,12 +175,22 @@ def build_pdf() -> None:
     header_tex = ROOT / "scripts" / "pandoc-header.tex"
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
-    generate_cover(raw_version, generated_at)
+
+    env = os.environ.copy()
+    diagram_path = render_cover_diagram(output_dir, env)
+    cover_html = output_dir / "00-cover.html"
+    generate_cover_html(raw_version, generated_at, diagram_path, cover_html)
+    cover_pdf = output_dir / "00-cover.pdf"
+    render_cover_pdf(cover_html, cover_pdf)
+    cover_include = output_dir / "00-cover.tex"
+    write_cover_include_tex(cover_include, cover_pdf)
     cmd = [
         "pandoc",
         "--from",
         "markdown+tex_math_dollars+raw_tex",
         "--standalone",
+        "--include-before-body",
+        str(cover_include),
         "--pdf-engine=xelatex",
         "--metadata",
         f"title={TITLE}",
@@ -146,12 +208,6 @@ def build_pdf() -> None:
         str(output_pdf),
     ] + [str(ROOT / chapter) for chapter in PDF_CHAPTERS]
 
-    env = os.environ.copy()
-    if "MERMAID_BIN" not in env:
-        wrapper = (
-            ROOT / "scripts" / ("mmdc-wrapper.cmd" if sys.platform.startswith("win") else "mmdc-wrapper.sh")
-        )
-        env["MERMAID_BIN"] = str(wrapper)
     subprocess.run(cmd, check=True, env=env)
 
 

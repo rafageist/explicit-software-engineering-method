@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @page { size: A4; margin: 0; }
+      body {
+        margin: 0;
+        font-family: "Times New Roman", serif;
+        color: #0f0f0f;
+        background: #ffffff;
+      }
+      .band-top { background: #142340; height: 90px; }
+      .band-bottom { background: #596069; height: 50px; }
+      .wrap { padding: 60px 80px 40px; text-align: center; }
+      .title { font-size: 30pt; font-weight: 700; color: #142340; letter-spacing: 0.3px; }
+      .version { font-size: 14pt; font-weight: 700; color: #0f0f0f; margin-top: 10px; }
+      .subtitle { font-size: 12pt; color: #2f2f2f; margin-top: 12px; }
+      .rule { height: 2px; width: 55%; background: #142340; margin: 18px auto 0; }
+      .diagram { margin: 28px auto 0; width: 48%; }
+      .author { font-size: 11pt; margin-top: 26px; color: #0f0f0f; }
+      .generated { font-size: 9pt; margin-top: 6px; color: #4a4a4a; }
+    </style>
+  </head>
+  <body>
+    <div class="band-top"></div>
+    <div class="wrap">
+      <div class="title">{{TITLE}}</div>
+      <div class="version">Version {{VERSION}}</div>
+      <div class="subtitle">{{SUBTITLE}}</div>
+      <div class="rule"></div>
+      <div class="diagram">
+        <img src="{{DIAGRAM_SRC}}" alt="Method traceability diagram" style="width: 100%;" />
+      </div>
+      <div class="author">{{AUTHOR}}</div>
+      <div class="generated">Generated: {{GENERATED_AT}}</div>
+    </div>
+    <div class="band-bottom"></div>
+  </body>
+</html>

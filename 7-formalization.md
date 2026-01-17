@@ -2,10 +2,14 @@
 
 This document provides a mathematical and logical formalization sketch of the method.
 It is intentionally minimal and focuses on: (1) entities, (2) relations, (3) normative obligations, and (4) diagnosability.
+It describes constraints over explicit artifacts and relations, not a prescriptive workflow.
+The goal is evaluability and diagnosability, not mathematical completeness.
 
 The formalization aims for **operational objectivity under explicit context**, not absolute objectivity.
 
 ---
+
+Before stating obligations, we must fix a universe of discourse. Without a declared universe, constraints have no stable targets and evaluation becomes ambiguous.
 
 ## 7.1 Universe of Discourse
 
@@ -36,6 +40,8 @@ We use unary predicates to type entities:
 - Intent(x), Decision(x), Artifact(x), Assumption(x), TradeOff(x), Validation(x), Compensation(x), Change(x), Parameter(x)
 
 ---
+
+Engineering reasoning is captured by relationships among these entities, not by an imposed sequence. A graph model makes traceability explicit without prescribing order.
 
 ## 7.2 Core Relations (Graph Model)
 
@@ -77,11 +83,15 @@ Traceability requirements in the method constrain the existence of such paths an
 
 ---
 
+First-order logic is used here to express invariants over the graph. These are constraints to be evaluated, not computations to be executed.
+
 ## 7.3 First-Order Logic (FOL) Axioms / Invariants
 
-The method is expressed as constraints that must hold regardless of workflow sequencing.
+The method is expressed as constraints that must hold regardless of workflow sequencing, reflecting orthogonality to process order. These constraints correspond directly to the normative rules defined earlier.
 
 Below, `∀` means "for all" and `∃` means "there exists".
+
+Rules 1-3 establish minimal explicitness and traceability for intent, decisions, and artifacts.
 
 ### 7.3.1 Rule 1 - Intent Declaration (Mandatory)
 
@@ -117,6 +127,8 @@ Orphan artifacts are unjustified:
 - ∀a ( Artifact(a) ∧ AffectsBehavior(a) ∧ ¬∃x ((Intent(x) ∨ Decision(x)) ∧ justifies(a, x))
        → Orphan(a) )
 
+Rules 4-6 cover validation, assumptions, and compensation under contextual risk.
+
 ### 7.3.4 Rule 4 - Validation Requirement (Contextual)
 
 Critical elements require validation, with criticality dependent on parameters:
@@ -126,6 +138,8 @@ Critical elements require validation, with criticality dependent on parameters:
 Critical(x) is not fixed; it is derived from parameters:
 
 - ∀x ( Critical(x) ↔ CriticalUnderParams(x, ParamsScope(x)) )
+
+Parameters are inputs to evaluation. They shape what counts as critical and what depth of validation is required; they do not excuse obligations.
 
 ### 7.3.5 Rule 5 - Assumption Declaration (Mandatory)
 
@@ -139,11 +153,17 @@ Whenever a required element is missing, compensation must exist and declare acce
 
 - ∀x ( Required(x) ∧ Missing(x) → ∃c (Compensation(c) ∧ compensates(c, x) ∧ StatesAcceptedRisk(c)) )
 
+Rule 7 makes context explicit so that evaluation is reproducible across teams and time.
+
 ### 7.3.7 Rule 7 - Parameter Awareness (Mandatory)
 
 Each relevant scope must declare applicable parameters:
 
 - ∀ch ( Change(ch) ∧ NonTrivial(ch) → ∃p (Parameter(p) ∧ paramOf(p, ch)) )
+
+Parameters affect obligations by defining thresholds and scopes; they are not tuning knobs for correctness.
+
+Rule 8 ties the constraints to diagnosability, aligning the method with failure analysis.
 
 ### 7.3.8 Rule 8 - Diagnosability of Failure (Outcome Rule)
 
@@ -166,6 +186,7 @@ ExplainsInMethodTerms(r, f) implies at least one of:
 ## 7.4 Deontic Layer (Obligations, Permissions, Consequences)
 
 FOL invariants describe truth conditions. The method is normative: it includes obligations.
+The deontic operators O, P, and R are interpretive layers over the invariants; they do not replace or extend the underlying FOL constraints.
 We model this with a deontic operator:
 
 - **O(φ)** : it is obligatory that φ holds (MUST)
@@ -185,6 +206,7 @@ The method permits shortcuts only if compensated:
 - P( Missing(x) )  IF  O( ∃c (Compensation(c) ∧ compensates(c, x) ∧ StatesAcceptedRisk(c)) )
 
 This expresses: missing artifacts/validation may occur, but only under explicit compensation.
+Compensation is permission under obligation; it records accepted risk and does not remove the obligation.
 
 ### 7.4.3 Consequences (Violation Semantics)
 
@@ -218,14 +240,15 @@ Given a failure f and a state:
 
 - **Diagnosable(f, State)** iff ∃r ExplainsInMethodTerms(r, f)
 
-This can be implemented as querying the explicit graph for missing links, missing validation, missing compensation, or parameter mismatches.
+This can be implemented as querying the explicit graph for missing links, missing validation, missing compensation, or parameter mismatches. It is the formal counterpart to the diagnosability requirement discussed earlier.
 
 ---
 
 ## 7.6 Practical Notes (Non-Normative)
 
+This level of formalization is sufficient to support objective evaluation, failure diagnosis, and tooling implementation without prescribing workflow.
 - This formalization is compatible with graph databases and constraint checking.
 - It is intentionally independent of any specific development process or lifecycle.
-- Temporal logics (e.g., TLA+) may be introduced later to model evolution, reconstruction post-hoc, or concurrency, but are not required for the method core.
+- Temporal logics (e.g., TLA+) and execution semantics may be introduced later to model evolution, reconstruction post-hoc, or concurrency, but are intentionally excluded from the method core.
 
 ---

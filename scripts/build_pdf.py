@@ -122,7 +122,7 @@ def build_pdf() -> None:
     cmd = [
         "pandoc",
         "--from",
-        "gfm+tex_math_dollars+raw_tex",
+        "markdown+tex_math_dollars+raw_tex",
         "--standalone",
         "--pdf-engine=xelatex",
         "--metadata",

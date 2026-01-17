@@ -1,40 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <style>
-      @page { size: A4; margin: 0; }
-      body {
-        margin: 0;
-        font-family: "Times New Roman", serif;
-        color: #0f0f0f;
-        background: #ffffff;
-      }
-      .band-top { background: #142340; height: 90px; }
-      .band-bottom { background: #596069; height: 50px; }
-      .wrap { padding: 60px 80px 40px; text-align: center; }
-      .title { font-size: 30pt; font-weight: 700; color: #142340; letter-spacing: 0.3px; }
-      .version { font-size: 14pt; font-weight: 700; color: #0f0f0f; margin-top: 10px; }
-      .subtitle { font-size: 12pt; color: #2f2f2f; margin-top: 12px; }
-      .rule { height: 2px; width: 55%; background: #142340; margin: 18px auto 0; }
-      .diagram { margin: 28px auto 0; width: 48%; }
-      .author { font-size: 11pt; margin-top: 26px; color: #0f0f0f; }
-      .generated { font-size: 9pt; margin-top: 6px; color: #4a4a4a; }
-    </style>
-  </head>
-  <body>
-    <div class="band-top"></div>
-    <div class="wrap">
-      <div class="title">{{TITLE}}</div>
-      <div class="version">Version {{VERSION}}</div>
-      <div class="subtitle">{{SUBTITLE}}</div>
-      <div class="rule"></div>
-      <div class="diagram">
-        <img src="{{DIAGRAM_SRC}}" alt="Method traceability diagram" style="width: 100%;" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    @page { size: A4; margin: 0; }
+
+    :root{
+      --ink: #0b1220;
+      --muted: #465062;
+      --brand: #142340;
+      --brand-2: #1e3a8a;  /* subtle accent */
+      --paper: #ffffff;
+      --wash: #f4f6fb;
+      --line: rgba(20,35,64,0.18);
+      --shadow: 0 10px 30px rgba(0,0,0,0.08);
+      --art-image: {{ART_IMAGE}};
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+
+    /* Full-page layout */
+    .page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      overflow: hidden;
+      background:
+        radial-gradient(900px 450px at 15% 10%, rgba(30,58,138,0.10), transparent 60%),
+        radial-gradient(900px 450px at 85% 20%, rgba(20,35,64,0.10), transparent 55%),
+        linear-gradient(180deg, var(--wash) 0%, #ffffff 45%);
+    }
+
+    /* subtle top rule */
+    .top-accent {
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 10mm;
+      background: linear-gradient(90deg, var(--brand) 0%, var(--brand-2) 100%);
+      opacity: 0.95;
+    }
+
+    /* content grid */
+    .content {
+      position: relative;
+      height: 100%;
+      padding: 22mm 22mm 18mm 22mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 8mm;
+      z-index: 2;
+    }
+
+    /* Header block */
+    .header {
+      text-align: center;
+      padding-top: 6mm;
+    }
+
+    .title {
+      font-size: 28pt;
+      line-height: 1.08;
+      letter-spacing: -0.2px;
+      font-weight: 750;
+      color: var(--brand);
+      margin: 0;
+    }
+
+    .meta-row {
+      margin-top: 4mm;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 11pt;
+    }
+
+    .version {
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(70,80,98,0.55);
+      display: inline-block;
+      transform: translateY(-2px);
+    }
+
+    .subtitle {
+      margin: 6mm auto 0;
+      max-width: 150mm;
+      font-size: 12pt;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .rule {
+      margin: 6mm auto 0;
+      width: 75mm;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* Cover art */
+    .art {
+      position: absolute;
+      inset: 0;
+      background-image: var(--art-image);
+      background-repeat: no-repeat;
+      background-position: center 58%;
+      background-size: 62% auto;
+      opacity: 0.16;
+      z-index: 1;
+    }
+
+    /* Footer */
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 6mm;
+      color: var(--muted);
+      font-size: 10pt;
+    }
+
+    .author {
+      justify-self: start;
+      font-weight: 650;
+      color: var(--ink);
+    }
+
+    .generated {
+      justify-self: end;
+      color: rgba(70,80,98,0.9);
+    }
+
+    /* tiny bottom line */
+    .bottom-line {
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 6mm;
+      background: #596069;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="top-accent"></div>
+    <div class="art" aria-hidden="true"></div>
+
+    <div class="content">
+      <div class="header">
+        <h1 class="title">{{TITLE}}</h1>
+
+        <div class="meta-row">
+          <span class="version">Version {{VERSION}}</span>
+          <span class="dot"></span>
+          <span>Normative reference</span>
+        </div>
+
+        <div class="subtitle">{{SUBTITLE}}</div>
+        <div class="rule"></div>
       </div>
-      <div class="author">{{AUTHOR}}</div>
-      <div class="generated">Generated: {{GENERATED_AT}}</div>
+
+      <div class="footer">
+        <div class="author">{{AUTHOR}}</div>
+        <div class="generated">Generated: {{GENERATED_AT}}</div>
+      </div>
     </div>
-    <div class="band-bottom"></div>
-  </body>
+
+    <div class="bottom-line"></div>
+  </div>
+</body>
 </html>

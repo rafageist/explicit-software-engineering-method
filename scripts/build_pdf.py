@@ -15,6 +15,7 @@ AUTHOR = "Rafael Rodríguez Ramírez"
 SUBTITLE = "A normative method for engineering accountability, traceability, and diagnosable failure"
 
 COVER_TEMPLATE = "00-cover.html"
+COVER_ART = "cover.png"
 CONTENTS_FILE = "00-contents.md"
 INDEX_FILE = "00-index.md"
 
@@ -93,35 +94,10 @@ def mermaid_binary(env: dict[str, str]) -> str:
     return env["MERMAID_BIN"]
 
 
-def render_cover_diagram(output_dir: Path, env: dict[str, str]) -> Path:
-    diagram_mmd = output_dir / "cover-diagram.mmd"
-    diagram_png = output_dir / "cover-diagram.png"
-    diagram_mmd.write_text(
-        "\n".join(
-            [
-                "flowchart TB",
-                "    I[Intent] --> D[Decision]",
-                "    D --> A[Artifact]",
-                "    A --> V[Validation]",
-                "    V -.-> I",
-                "",
-            ]
-        ),
-        encoding="utf-8",
-    )
-    mermaid_bin = mermaid_binary(env)
-    subprocess.run(
-        [mermaid_bin, "-i", str(diagram_mmd), "-o", str(diagram_png), "-b", "transparent"],
-        check=True,
-        env=env,
-    )
-    return diagram_png
-
-
 def generate_cover_html(
     version: str,
     generated_at: str,
-    diagram_path: Path,
+    art_image: str,
     output_path: Path,
 ) -> None:
     template = (ROOT / COVER_TEMPLATE).read_text(encoding="utf-8")
@@ -131,7 +107,7 @@ def generate_cover_html(
         .replace("{{SUBTITLE}}", SUBTITLE)
         .replace("{{AUTHOR}}", AUTHOR)
         .replace("{{GENERATED_AT}}", generated_at)
-        .replace("{{DIAGRAM_SRC}}", diagram_path.name)
+        .replace("{{ART_IMAGE}}", art_image)
     )
     output_path.write_text(html, encoding="utf-8")
 
@@ -166,6 +142,16 @@ def write_cover_include_tex(output_path: Path, cover_pdf: Path) -> None:
     )
 
 
+def resolve_cover_art(output_dir: Path) -> str:
+    source = ROOT / COVER_ART
+    if not source.is_file():
+        return "none"
+    destination = output_dir / COVER_ART
+    if source.resolve() != destination.resolve():
+        shutil.copyfile(source, destination)
+    return f"url('{COVER_ART}')"
+
+
 def build_pdf() -> None:
     output_dir = ROOT / "build"
     output_dir.mkdir(exist_ok=True)
@@ -177,9 +163,10 @@ def build_pdf() -> None:
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     env = os.environ.copy()
-    diagram_path = render_cover_diagram(output_dir, env)
+    mermaid_binary(env)
+    art_image = resolve_cover_art(output_dir)
     cover_html = output_dir / "00-cover.html"
-    generate_cover_html(raw_version, generated_at, diagram_path, cover_html)
+    generate_cover_html(raw_version, generated_at, art_image, cover_html)
     cover_pdf = output_dir / "00-cover.pdf"
     render_cover_pdf(cover_html, cover_pdf)
     cover_include = output_dir / "00-cover.tex"

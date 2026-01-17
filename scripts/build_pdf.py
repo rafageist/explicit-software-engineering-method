@@ -27,6 +27,7 @@ CHAPTERS = [
     "5-orthogonality.md",
     "6-failure-as-a-method-outcome.md",
     "7-formalization.md",
+    "glossary.md",
 ]
 PDF_CHAPTERS = [COVER_FILE, CONTENTS_FILE] + CHAPTERS
 

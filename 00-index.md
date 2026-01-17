@@ -12,8 +12,9 @@
 - [1. Why This Is a Method](1-why-a-method.md)
   - 1.1 Methodology vs Method vs Process
   - 1.2 Why "Method" Fits
-  - 1.3 Why Not a Process
-  - 1.4 Implication
+  - 1.3 Dependency Without Rigidity
+  - 1.4 Separation of Concerns
+  - 1.5 Method as Evaluative Function
 
 - [2. From Software to Software Product](2-from-software-to-product.md)
   - 2.1 Software Is Output; a Product Is an Outcome
@@ -24,6 +25,7 @@
   - 2.6 Summary
 
 - [3. Normative Core Rules (Draft)](3-normative-rules.md)
+  - 3.0 How to Read These Rules
   - 3.1 Rule 1 - Intent Declaration (Mandatory)
   - 3.2 Rule 2 - Decision Explicitness (Mandatory)
   - 3.3 Rule 3 - Artifact Traceability (Mandatory)
@@ -33,16 +35,17 @@
   - 3.7 Rule 7 - Parameter Awareness (Mandatory)
   - 3.8 Rule 8 - Diagnosability of Failure (Outcome Rule)
   - 3.9 Meta-Note
+  - 3.10 Conclusion
 
 - [4. Relationship to Standards](4-relation-with-standards.md)
   - 4.1 Compatibility with IEEE and ISO Standards
   - 4.2 Process Frameworks vs Method Execution
 
-- [5. Orthogonality to Agile and Process Frameworks](5-orthogonality.md)
+- [5. Orthogonality to Process Frameworks](5-orthogonality.md)
   - 5.1 Different Problem Spaces
   - 5.2 Logical Dependencies vs Process Prescription
-  - 5.3 Why This Is Not Competing with Agile or RUP
-  - 5.4 Why a Method Is Sufficient
+  - 5.3 Coexistence with Process Structure
+  - 5.4 What Orthogonality Does and Does Not Mean
   - 5.5 Summary
 
 - [6. Failure as a Method Outcome](6-failure-as-a-method-outcome.md)
@@ -77,3 +80,5 @@
     - 7.5.1 Compliance Function
     - 7.5.2 Diagnosability Function
   - 7.6 Practical Notes (Non-Normative)
+
+- [Glossary](glossary.md)

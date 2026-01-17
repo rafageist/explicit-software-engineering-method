@@ -4,6 +4,7 @@
 \usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=14pt,headsep=0.5cm]{geometry}
 \usepackage{etoolbox}
 \usepackage{fancyhdr}
+\setcounter{tocdepth}{3}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -30,15 +31,5 @@
 \makeatother
 
 \makeatletter
-\renewcommand{\maketitle}{
-  \begin{titlepage}
-    \centering
-    \vspace*{0.35\textheight}
-    {\LARGE\bfseries \@title\par}
-    \vspace{1cm}
-    {\large \@author\par}
-    \vspace{0.5cm}
-    {\large \@date\par}
-  \end{titlepage}
-}
+\renewcommand{\maketitle}{}
 \makeatother

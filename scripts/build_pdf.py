@@ -4,14 +4,17 @@ import os
 import re
 import subprocess
 import sys
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
 TITLE = "Explicit Software Engineering Method"
 AUTHOR = "Rafael Rodríguez Ramírez"
+SUBTITLE = "A normative method for engineering accountability, traceability, and diagnosable failure"
 
+COVER_FILE = "00-cover.md"
+CONTENTS_FILE = "00-contents.md"
 INDEX_FILE = "00-index.md"
 
 CHAPTERS = [
@@ -25,6 +28,7 @@ CHAPTERS = [
     "6-failure-as-a-method-outcome.md",
     "7-formalization.md",
 ]
+PDF_CHAPTERS = [COVER_FILE, CONTENTS_FILE] + CHAPTERS
 
 HEADING_RE = re.compile(r"^(#{1,3})\s+(.*)$")
 
@@ -74,28 +78,58 @@ def generate_index() -> None:
     (ROOT / INDEX_FILE).write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
 
 
+def generate_cover(version: str, generated_at: str) -> None:
+    lines = [
+        r"\begin{center}",
+        r"\vspace*{0.18\textheight}",
+        f"{{\\LARGE\\bfseries {TITLE}\\par}}",
+        r"\vspace{0.6cm}",
+        f"{{\\Large\\bfseries Version {version}\\par}}",
+        r"\vspace{0.4cm}",
+        f"{{\\large {SUBTITLE}\\par}}",
+        r"\vspace{1cm}",
+        "",
+        "```mermaid",
+        "flowchart TB",
+        "    I[Intent] --> D[Decision]",
+        "    D --> A[Artifact]",
+        "    A --> V[Validation]",
+        "    V -.-> I",
+        "```",
+        "",
+        r"\vspace{1cm}",
+        f"{{\\large {AUTHOR}\\par}}",
+        r"\vspace{0.3cm}",
+        f"{{\\small Generated: {generated_at}\\par}}",
+        r"\end{center}",
+        r"\newpage",
+        "",
+    ]
+    (ROOT / COVER_FILE).write_text("\n".join(lines), encoding="utf-8")
+
+
 def build_pdf() -> None:
     output_dir = ROOT / "build"
     output_dir.mkdir(exist_ok=True)
-    version = sanitize_version(read_manifest_version())
+    raw_version = read_manifest_version()
+    version = sanitize_version(raw_version)
     output_pdf = output_dir / f"Explicit-Software-Engineering-Method_{version}.pdf"
     header_tex = ROOT / "scripts" / "pandoc-header.tex"
 
-    today = date.today().isoformat()
+    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generate_cover(raw_version, generated_at)
     cmd = [
         "pandoc",
         "--from",
-        "gfm+tex_math_dollars",
+        "gfm+tex_math_dollars+raw_tex",
         "--standalone",
-        "--toc",
-        "--toc-depth=3",
         "--pdf-engine=xelatex",
         "--metadata",
         f"title={TITLE}",
         "--metadata",
         f"author={AUTHOR}",
         "--metadata",
-        f"date={today}",
+        f"date={generated_at}",
         "--include-in-header",
         str(header_tex),
         "--filter",
@@ -104,7 +138,7 @@ def build_pdf() -> None:
         str(ROOT),
         "-o",
         str(output_pdf),
-    ] + [str(ROOT / chapter) for chapter in CHAPTERS]
+    ] + [str(ROOT / chapter) for chapter in PDF_CHAPTERS]
 
     env = os.environ.copy()
     if "MERMAID_BIN" not in env:

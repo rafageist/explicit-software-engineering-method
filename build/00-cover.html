@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    @page { size: A4; margin: 0; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #0b1220;
+      background: #ffffff;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 28mm 24mm 22mm 24mm;
+      box-sizing: border-box;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+    }
+
+    .title {
+      font-size: 30pt;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      margin-top: 6mm;
+      font-size: 12.5pt;
+      color: #465062;
+      max-width: 150mm;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.4;
+    }
+
+    .meta {
+      margin-top: 4mm;
+      font-size: 11pt;
+      color: #465062;
+    }
+
+    /* Image block */
+    .art {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12mm 0;
+    }
+
+    .art img {
+      width: 140mm;
+      max-height: 140mm;
+      object-fit: contain;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10pt;
+      color: #465062;
+    }
+
+    .author {
+      font-weight: 600;
+      color: #0b1220;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <div class="header">
+      <h1 class="title">Explicit Software Engineering Method</h1>
+
+      <div class="meta">
+        Version 0.2.0 · Normative reference
+      </div>
+
+      <div class="subtitle">
+        A normative method for engineering accountability, traceability,
+        and diagnosable failure
+      </div>
+    </div>
+
+    <div class="art">
+      <img src="cover.png" alt="Engineering balance controls illustration">
+    </div>
+
+    <div class="footer">
+      <div class="author">Rafael Rodríguez Ramírez</div>
+      <div>Generated 2026-01-17 20:37 UTC</div>
+    </div>
+
+  </div>
+</body>
+</html>

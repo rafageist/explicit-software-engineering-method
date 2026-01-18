@@ -70,19 +70,19 @@ jobs:
           out.write_text(f"version={version}\ntag={tag}\ntitle={title}\n", encoding="utf-8")
           PY
 
-      - name: Build PDF
-        run: python scripts/build_pdf.py
+      - name: Build PDFs (all languages)
+        run: python scripts/build_pdf.py --lang en --lang es
 
       - name: Upload PDF artifact
         uses: actions/upload-artifact@v4
         with:
           name: explicit-software-engineering-method-pdf
-          path: build/Explicit-Software-Engineering-Method_*.pdf
+          path: build/*.pdf
 
       - name: Release PDF
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.meta.outputs.tag }}
           name: ${{ steps.meta.outputs.title }}
-          files: build/Explicit-Software-Engineering-Method_*.pdf
+          files: build/*.pdf
           fail_on_unmatched_files: true

@@ -26,6 +26,7 @@ LANG_CONFIG = {
         "index_file": "00-index.md",
         "index_title": "Index",
         "include_index": True,
+        "header_tex": "pandoc-header.tex",
         "chapters": [
             "prologue.md",
             "the-problem.md",
@@ -52,6 +53,7 @@ LANG_CONFIG = {
         "index_file": "00-indice.md",
         "index_title": "\u00cdndice",
         "include_index": False,
+        "header_tex": "pandoc-header-es.tex",
         "chapters": [
             "prologo.md",
             "el-problema.md",
@@ -226,7 +228,7 @@ def build_pdf_for_language(lang: str) -> None:
     raw_version = read_manifest_version()
     version = sanitize_version(raw_version)
     output_pdf = output_root / f"{config['pdf_basename']}_{version}.pdf"
-    header_tex = ROOT / "scripts" / "pandoc-header.tex"
+    header_tex = ROOT / "scripts" / config.get("header_tex", "pandoc-header.tex")
 
     generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 

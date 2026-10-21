@@ -1,1 +1,1 @@
-pandoc-mermaid-filter
+pandoc-mermaid-filter==0.1.0

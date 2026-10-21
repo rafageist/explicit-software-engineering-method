@@ -7,6 +7,13 @@
 \usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm,headheight=14pt,headsep=0.5cm]{geometry}
 \usepackage{etoolbox}
 \usepackage{fancyhdr}
+\usepackage{newunicodechar}
+% Symbols used in running text that the default text fonts do not provide.
+\newunicodechar{⟨}{\ensuremath{\langle}}
+\newunicodechar{⟩}{\ensuremath{\rangle}}
+\newunicodechar{φ}{\ensuremath{\varphi}}
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{→}{\ensuremath{\rightarrow}}
 \usepackage[none]{hyphenat}
 \setcounter{tocdepth}{3}
 \definecolor{Navy}{RGB}{20,35,64}

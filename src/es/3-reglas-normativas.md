@@ -142,9 +142,17 @@ Los supuestos implícitos acumulan riesgo en silencio.
 **Precisión.**
 *Sujeto:* cada decisión o artefacto del alcance evaluado que depende de una premisa no respaldada por evidencia en el registro.
 *Se satisface cuando:* cada una de esas premisas está registrada como supuesto, tipada como tal y vinculada a los elementos que dependen de ella. El seguimiento (DEBERÍA) significa que el supuesto tiene un estado (*abierto*, *validado*, *invalidado*) y que el registro muestra cuándo cambió ese estado.
-*Detectabilidad.* Una premisa oculta, por definición, no está en el registro. En general, las violaciones de la Regla 5 no pueden encontrarse inspeccionando mecánicamente el registro. Se establecen mediante revisión o análisis de fallos, cuando se identifica una premisa de la que se dependía y se constata que no estaba validada ni declarada. Las verificaciones mecánicas cubren solo la parte declarada: tipado, vínculos y estado.
+*Detectabilidad.* Una premisa oculta, por definición, no está en el registro. En general, las violaciones de la Regla 5 no pueden encontrarse inspeccionando mecánicamente el registro. Se establecen mediante revisión o análisis de fallos, cuando se identifica una premisa de la que se dependía y se constata que no estaba validada ni declarada. Las verificaciones mecánicas cubren solo la parte declarada: tipado, vínculos y estado. Según la interpretación propuesta de OD-1 (3.8), ese hallazgo cuenta solo cuando la revisión o el análisis ha establecido que el elemento dependía de la premisa. Una premisa sospechada deja la instancia *indeterminada*, no *violada*.
 *Relación con la Regla 6.* Un supuesto registra lo que se cree. Una compensación registra qué obligación no se cumple y qué riesgo se acepta. Ambos son complementarios: un artefacto crítico liberado sin validación bajo la premisa de que una dependencia se comporta como está documentado necesita tanto un supuesto declarado (Regla 5) como una compensación por la validación faltante (Regla 6). Un supuesto declarado que después resulta falso no es una violación de la Regla 5; es la regla funcionando.
 *Contraparte formal:* 7.3, R5.
+
+**Interpretación propuesta (OD-5).** La Regla 5 no es compensable. Su obligación mínima es identificar y declarar la premisa: registrarla como supuesto y vincularla a los elementos que dependen de ella. Aceptar un riesgo no puede sustituir esa obligación, porque solo una premisa ya declarada puede ser objeto de un riesgo aceptado. Una compensación cuya declaración de riesgo menciona una premisa no la declara; la premisa queda declarada solo cuando se registra como supuesto. Lo que puede diferirse, y compensarse, es la *evidencia* de un supuesto declarado:
+
+- La Regla 5 no exige la evidencia. Un supuesto declarado es el registro de que la evidencia falta o se difiere, y un supuesto abierto y declarado satisface la Regla 5.
+- Cuando el contexto exige evidencia para la premisa, porque un elemento crítico depende de ella, la exigencia pertenece a la Regla 4. La política de adecuación de la validación PUEDE exigir que se validen las premisas de las que depende un sujeto crítico. Una validación faltante de ese tipo es una brecha en la instancia de la Regla 4 de ese sujeto, y a ella se aplica la Regla 6: la compensación referencia esa instancia y el supuesto declarado.
+- El seguimiento del estado de un supuesto sigue siendo una recomendación (DEBERÍA). No hacerlo produce una nota, no un resultado.
+
+En consecuencia, una premisa no declarada de la que se ha establecido que un elemento depende deja *violada* la instancia de la Regla 5, existan o no compensaciones. Una premisa declarada pero no validada satisface la Regla 5; si el contexto exige evidencia para ella, esa brecha de evidencia queda *compensada* o *violada* según la Regla 4.
 
 ## 3.6 Regla 6 - Compensación explícita (obligatoria)
 Cuando falta un artefacto o validación requerida, la ausencia DEBE compensarse explícitamente.
@@ -165,7 +173,7 @@ Se permiten atajos; no se permiten atajos silenciosos.
 *Se satisface cuando:* un registro de compensación referencia la instancia de obligación, declara el riesgo aceptado y es válido en el momento de la evaluación (ver más abajo). El resultado de la instancia referenciada es entonces *compensada*, nunca *satisfecha*. La remediación (producir el registro faltante) convierte la instancia en *satisfecha* para las versiones que cubre y cierra la compensación.
 *Validez.* Una compensación es válida cuando es admisible para esa obligación según el conjunto de parámetros, la acepta una parte a la que la política de autoridad permite aceptar ese riesgo y no ha expirado. Una compensación no válida deja la instancia *violada*. No crea por sí misma una segunda violación.
 
-**Interpretación propuesta (OD-5).** Las reglas compensables son R2, R3, R4 y R5. R1 y R7 no son compensables; R6 y R8 no están sujetas a compensación. Los parámetros PUEDEN declarar otras obligaciones como no compensables en un contexto.
+**Interpretación propuesta (OD-5).** Las reglas compensables son R2, R3 y R4. R1, R5 y R7 no son compensables; R6 y R8 no están sujetas a compensación. Para la Regla 5 la obligación es la declaración misma; las brechas de evidencia asociadas a un supuesto declarado se compensan según la Regla 4 (3.5). Los parámetros PUEDEN declarar otras obligaciones como no compensables en un contexto.
 
 **Interpretación propuesta (OD-6).** Una compensación DEBE declarar una condición de revisión: una fecha de expiración o un evento, por ejemplo "hasta que la suite de pruebas de integración pase en verde". PUEDE ser indefinida solo si el conjunto de parámetros permite la aceptación permanente para ese tipo de obligación. Una compensación registrada después de la exposición que cubre (por ejemplo, después de un fallo) se marca como *retroactiva*. Cuenta para las evaluaciones posteriores a su registro, pero no es evidencia de que el riesgo se aceptara antes de la exposición.
 
@@ -225,14 +233,23 @@ Si el fallo no puede explicarse en términos del método, el método no se aplic
 La Regla 8 se evalúa a posteriori y depende de un análisis causal del fallo (análisis de incidentes, depuración, investigación de causa raíz) que el método no realiza. El método relaciona los factores causales identificados por ese análisis con el registro de ingeniería. No identifica causas por sí mismo.
 Las seis razones enumeradas son de naturaleza distinta. *Intención ausente*, *artefacto no validado* y *compensación inadecuada* son brechas en obligaciones. *Supuesto falso* suele ser una premisa declarada que resultó errónea, lo que es el método funcionando. *Decisión inválida* y *parámetros mal configurados* son juicios hechos en retrospectiva y deben apoyarse en el registro disponible en el momento de la decisión.
 
-**Interpretación propuesta (OD-1).** La Regla 8 obliga a que el registro de ingeniería sea suficiente para clasificar cada factor causal de un fallo que esté dentro del alcance evaluado en una de cinco clases:
+**Interpretación propuesta (OD-1).** La Regla 8 obliga a que el registro de ingeniería sea suficiente para relacionar con él cada factor causal establecido de un fallo dentro del alcance evaluado. Distingue dos situaciones que el texto 0.2.1 no distingue:
+
+- *Una relación faltante con el contexto de ingeniería.* El análisis causal ha establecido el factor y dónde actúa, ese lugar está dentro del alcance evaluado, y el registro, declarado completo para esa parte del alcance, no contiene ningún elemento con el que pueda relacionarse el factor. El comportamiento afectado se configuró fuera del registro de ingeniería. Esta situación, y solo esta, viola la Regla 8.
+- *Incertidumbre causal o investigación incompleta.* El factor es todavía una hipótesis, aún no se sabe dónde actúa, la investigación no ha declarado definitivo su conjunto de factores, o la relación no puede verificarse porque la evidencia es inaccesible o no está declarada completa. Son límites del análisis o del acceso a la evidencia, no hallazgos sobre el registro. Dejan el resultado *indeterminado*.
+
+Cada factor establecido cuyo lugar de acción se conoce se clasifica en una de cinco clases:
 1. una brecha a nivel de método (una instancia de obligación *violada*, o una compensación que no era válida);
 2. un riesgo aceptado materializado (una compensación válida o un supuesto declarado);
 3. una clasificación errónea de parámetros (una política que clasificó el elemento como trivial, no crítico o compensable, con consecuencias fuera de la tolerancia al riesgo declarada);
 4. un factor externo o fuera de alcance;
-5. no relacionado: el factor está dentro del alcance evaluado pero no puede relacionarse con ningún elemento del registro de ingeniería (por ejemplo, un ajuste de producción cambiado fuera del control de versiones).
+5. no relacionado, es decir, una relación faltante con el contexto de ingeniería tal como se definió arriba (por ejemplo, un ajuste de producción cambiado fuera del control de versiones).
 
-La Regla 8 solo se viola por factores de la clase 5. No se viola por factores externos ni por riesgos aceptados que se materializan. Cuando existe una relación pero no puede verificarse porque la evidencia es inaccesible, el resultado es *indeterminada*. Bajo esta interpretación, la justificación anterior se lee: *si un fallo no puede relacionarse con el registro de ingeniería, el registro era insuficiente*. El texto actual dice que el método no se aplicó, lo que el capítulo 6.6 contradice para fallos externos e irreducibles.
+Un factor que todavía no puede clasificarse está *sin resolver*. La Regla 8 solo se viola por factores de la clase 5. Se satisface cuando la investigación ha declarado definitivo su conjunto de factores y todos ellos están en las clases 1 a 4. En otro caso es *indeterminada*. La Regla 8 no se viola por factores externos, riesgos aceptados materializados ni factores sin resolver.
+
+El análisis del fallo no crea violaciones de otras reglas. Un factor de la clase 1 apunta a una instancia que ya estaba *violada* al evaluarla sobre el registro tal como estaba antes del fallo (7.7). Un factor que todavía no puede relacionarse de forma fiable con el registro no deja *violada* ninguna instancia de obligación, ni de la Regla 8 ni de ninguna otra; en particular, un factor sin resolver no es una brecha. Cuando el análisis aporta evidencia nueva, por ejemplo que un cambio dependía de una premisa no declarada, esa evidencia entra en la evaluación como juicio registrado y se evalúa como cualquier otro registro.
+
+Bajo esta interpretación, la justificación anterior se lee: *si un factor establecido de un fallo no puede relacionarse con el registro de ingeniería, el registro era insuficiente*. El texto actual dice que el método no se aplicó, lo que el capítulo 6.6 contradice para fallos externos e irreducibles.
 
 *Contraparte formal:* 7.7.
 

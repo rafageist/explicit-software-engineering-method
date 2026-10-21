@@ -142,9 +142,17 @@ Implicit assumptions silently accumulate risk.
 **Precision.**
 *Subject:* each decision or artifact in the evaluated scope that relies on a premise not supported by evidence in the record.
 *Satisfied when:* each such premise is recorded as an assumption, typed as such, and linked to the elements that rely on it. Tracking (SHOULD) means the assumption has a status (*open*, *validated*, *invalidated*), and the record shows when the status changed.
-*Detectability.* A hidden premise is, by definition, not in the record. In general, violations of Rule 5 cannot be found by inspecting the record mechanically. They are established by review or by failure analysis, when a premise relied upon is identified and found to be neither validated nor declared. Mechanical checks cover only the declared part: typing, links and status.
+*Detectability.* A hidden premise is, by definition, not in the record. In general, violations of Rule 5 cannot be found by inspecting the record mechanically. They are established by review or by failure analysis, when a premise relied upon is identified and found to be neither validated nor declared. Mechanical checks cover only the declared part: typing, links and status. Under the proposed interpretation of OD-1 (3.8), such a finding counts only when the review or the analysis has established that the element relied on the premise. A suspected premise makes the instance *indeterminate*, not *violated*.
 *Relation to Rule 6.* An assumption records what is believed. A compensation records which obligation is unmet and which risk is accepted. The two are complementary: a critical artifact released without validation on the premise that a dependency behaves as documented needs both a declared assumption (Rule 5) and a compensation for the missing validation (Rule 6). A declared assumption that later proves false is not a violation of Rule 5; it is the rule working.
 *Formal counterpart:* 7.3, R5.
+
+**Proposed interpretation (OD-5).** Rule 5 is not compensable. Its minimum obligation is to identify and declare the premise: record it as an assumption and link it to the elements that rely on it. Accepting a risk cannot replace that obligation, because only a premise that has been declared can be the object of an accepted risk. A compensation whose risk statement mentions a premise does not declare it; the premise is declared only when it is recorded as an assumption. What can be deferred, and compensated, is the *evidence* for a declared assumption:
+
+- Rule 5 does not require the evidence. A declared assumption is the record that evidence is missing or deferred, and an open, declared assumption satisfies Rule 5.
+- When the context requires evidence for the premise, because a critical element relies on it, the requirement belongs to Rule 4. The validation-adequacy policy MAY require that the premises a critical subject relies on are validated. A missing validation of that kind is a gap in the Rule 4 instance of that subject, and Rule 6 applies to it: the compensation references that instance and the declared assumption.
+- Tracking the status of an assumption remains a recommendation (SHOULD). Not tracking it produces a note, not an outcome.
+
+As a result, an undeclared premise that an element is established to rely on leaves the Rule 5 instance *violated*, whatever compensations exist. A declared but unvalidated premise satisfies Rule 5; if the context requires evidence for it, that evidence gap is *compensated* or *violated* under Rule 4.
 
 ## 3.6 Rule 6 - Explicit Compensation (Mandatory)
 When a required artifact or validation is missing, the absence MUST be explicitly compensated.
@@ -165,7 +173,7 @@ Shortcuts are allowed; silent shortcuts are not.
 *Satisfied when:* a compensation record references the obligation instance, states the accepted risk, and is valid at evaluation time (see below). The outcome of the referenced instance is then *compensated*, never *satisfied*. Remediation (producing the missing record) turns the instance into *satisfied* for the versions it covers and closes the compensation.
 *Validity.* A compensation is valid when it is admissible for that obligation under the parameter set, is accepted by a party the authority policy allows to accept that risk, and has not expired. A compensation that is not valid leaves the instance *violated*. It does not by itself create a second violation.
 
-**Proposed interpretation (OD-5).** Compensable rules are R2, R3, R4 and R5. R1 and R7 are not compensable; R6 and R8 are not subject to compensation. Parameters MAY declare further obligations non-compensable in a context.
+**Proposed interpretation (OD-5).** Compensable rules are R2, R3 and R4. R1, R5 and R7 are not compensable; R6 and R8 are not subject to compensation. For Rule 5 the obligation is the declaration itself; evidence gaps associated with a declared assumption are compensated under Rule 4 (3.5). Parameters MAY declare further obligations non-compensable in a context.
 
 **Proposed interpretation (OD-6).** A compensation MUST declare a review condition: an expiry date or an event, such as "until the integration test suite runs green". It MAY be open-ended only if the parameter set allows permanent acceptance for that kind of obligation. A compensation recorded after the exposure it covers (for example after a failure) is flagged as *retroactive*. It counts for evaluations after it was recorded, but is not evidence that the risk was accepted before the exposure.
 
@@ -225,14 +233,23 @@ If failure cannot be explained in method terms, the method was not applied.
 Rule 8 is evaluated after the fact and depends on a causal analysis of the failure (incident analysis, debugging, root-cause investigation), which the method does not perform. The method relates the causal factors identified by that analysis to the engineering record. It does not identify causes by itself.
 The six reasons listed are of different kinds. *Missing intent*, *unvalidated artifact* and *inadequate compensation* are gaps in obligations. *False assumption* is usually a declared premise that proved wrong, which is the method working. *Invalid decision* and *misconfigured parameters* are judgments made with hindsight and must be supported by the record available at the time of the decision.
 
-**Proposed interpretation (OD-1).** Rule 8 obliges the engineering record to be sufficient to classify every causal factor of a failure that lies within the evaluated scope into one of five classes:
+**Proposed interpretation (OD-1).** Rule 8 obliges the engineering record to be sufficient to relate each established causal factor of a failure within the evaluated scope to the record. It distinguishes two situations that the 0.2.1 text does not:
+
+- *A missing engineering-context relationship.* The causal analysis has established the factor and where it acts, that place lies within the evaluated scope, and the record, declared complete for that part of the scope, contains no element the factor can be related to. The behavior involved was shaped outside the engineering record. This situation, and only this one, violates Rule 8.
+- *Causal uncertainty or incomplete investigation.* The factor is still a hypothesis, where it acts is not yet known, the investigation has not declared its set of factors final, or the relation cannot be checked because the evidence is inaccessible or not declared complete. These are limits of the analysis or of access to evidence, not findings about the record. They make the outcome *indeterminate*.
+
+Each established factor whose place of action is known is classified into one of five classes:
 1. a method-level gap (a *violated* obligation instance, or a compensation that was invalid);
 2. a realized accepted risk (a valid compensation or a declared assumption);
 3. a parameter misclassification (a policy that classified the element as trivial, non-critical or compensable, with consequences outside the declared risk tolerance);
 4. an external or out-of-scope factor;
-5. unrelated: the factor lies within the evaluated scope but cannot be related to any element of the engineering record (for example a production setting changed outside version control).
+5. unrelated, that is, a missing engineering-context relationship as defined above (for example a production setting changed outside version control).
 
-Rule 8 is violated only by factors in class 5. It is not violated by external factors or realized accepted risks. When a relation exists but cannot be checked because the evidence is inaccessible, the outcome is *indeterminate*. Under this interpretation the rationale above reads: *if a failure cannot be related to the engineering record, the record was insufficient*. The current text says that the method was not applied, which chapter 6.6 contradicts for external and irreducible failures.
+A factor that cannot yet be classified is *unresolved*. Rule 8 is violated only by factors in class 5. It is satisfied when the investigation has declared its set of factors final and every factor in it is in classes 1 to 4. Otherwise it is *indeterminate*. Rule 8 is not violated by external factors, realized accepted risks or unresolved factors.
+
+The failure analysis does not create violations of other rules. A factor of class 1 points to an instance that was already *violated* when evaluated on the record as it stood before the failure (7.7). A factor that cannot yet be reliably related to the record makes no obligation instance *violated*, under Rule 8 or under any other rule; in particular, an unresolved factor is not a gap. When the analysis contributes new evidence, for example that a change relied on an undeclared premise, that evidence enters the evaluation as a recorded judgment and is evaluated like any other record.
+
+Under this interpretation the rationale above reads: *if an established failure factor cannot be related to the engineering record, the record was insufficient*. The current text says that the method was not applied, which chapter 6.6 contradicts for external and irreducible failures.
 
 *Formal counterpart:* 7.7.
 

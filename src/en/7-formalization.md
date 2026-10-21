@@ -180,6 +180,12 @@ $$\mathrm{Req}_4(x) \equiv \exists v\ \exists x'\ \big(\mathsf{validates}(v, x')
 
 Three conditions are new with respect to 0.2.1 (review F-08). Validation is bound to a version, because elements of $A$ are versions. The validation must have passed: a failing test run is evidence, but not evidence that $x$ satisfies its intent. Adequacy is decided by the validation-adequacy policy, which makes the "validation depth" of Rule 7 operative.
 
+The adequacy policy may extend to the premises $x$ relies on, for example by requiring
+
+$$\mathsf{Adequate}(v, x) \rightarrow \forall s\ \big(\mathsf{assumes}(x, s) \rightarrow \exists v'\ (\mathsf{validates}(v', s) \land \mathsf{Passed}(v'))\big)$$
+
+This is where evidence gaps associated with declared assumptions are evaluated, and why they are compensable under Rule 4 rather than under Rule 5 *(proposed, OD-5)*.
+
 ### 7.3.5 Rule 5 - Assumption Declaration
 
 $$\mathrm{App}_5(s) \equiv \exists x\ \mathsf{relies}(x, s) \land \lnot \exists v\ (\mathsf{validates}(v, s) \land \mathsf{Passed}(v))$$
@@ -187,6 +193,8 @@ $$\mathrm{App}_5(s) \equiv \exists x\ \mathsf{relies}(x, s) \land \lnot \exists 
 $$\mathrm{Req}_5(s) \equiv \mathsf{Declared}(s) \land \forall x\ (\mathsf{relies}(x, s) \rightarrow \mathsf{assumes}(x, s))$$
 
 The 0.2.1 formula $\forall x\ (\mathsf{EvidenceMissing}(x) \rightarrow \exists s\ \mathsf{assumes}(x,s))$ quantified over all entities and could not tell a declared premise from an undeclared one (review F-09). The SHOULD on tracking is a recommendation (7.4): an assumption whose status is not tracked is reported but is not a violation.
+
+Rule 5 is not compensable *(proposed, OD-5)*. $\mathrm{Req}_5$ asks only for the declaration and its links, not for evidence; an open, declared assumption satisfies it. When $\mathsf{relies}(x, s)$ is known only from a failure analysis, it holds only if the analysis has established it (7.7). A suspected reliance gives the value $\mathbf{u}$.
 
 ### 7.3.6 Rule 6 - Explicit Compensation
 
@@ -210,10 +218,10 @@ Rule 8 is evaluated per failure and depends on the classification defined in 7.7
 | R2 | $d \in D$ | $\mathsf{Impactful} \lor \mathsf{Irreversible}$ | recorded, serves intent, alternatives, trade-off | yes | irreversibility, alternatives and trade-off added; compensation moved out of formula |
 | R3 | $a \in A$ | $\mathsf{AffectsBehavior}$ | justification path, navigable | yes | path instead of direct edge; compensation moved out |
 | R4 | $x \in A \cup D$ | $\mathsf{Critical}$ | passed, adequate validation of same version | yes | version, result and adequacy added; domain restricted |
-| R5 | $s \in S$ | relied upon, unvalidated | declared and linked | yes | quantifies over premises, not all entities |
-| R6 | outcomes of R1-R5, R7 | — | valid compensation | — | targets obligation instances |
+| R5 | $s \in S$ | relied upon, unvalidated | declared and linked | no (evidence gaps under R4) | quantifies over premises, not all entities; declaration not compensable |
+| R6 | outcomes of R2-R4 | — | valid compensation | — | targets obligation instances |
 | R7 | $\alpha$ | always | explicit, versioned, covering parameter set | no | addressed to the application |
-| R8 | $f \in F$ | failure in scope | every factor classified | — | classification instead of a single reason |
+| R8 | $f \in F$ | failure in scope | no unrelated established factor; factor set final | — | classification instead of a single reason; uncertainty is indeterminate |
 
 ---
 
@@ -238,11 +246,13 @@ Example (Rule 1): $\mathbf{O}\big(\exists i\ (\mathsf{declares}(ch,i) \land \mat
 
 Version 0.2.1 wrote "$P(\mathsf{Missing}(x))$ IF $O(\exists c \ldots)$", which is not a well-formed deontic formula. What the prose describes is a *contrary-to-duty* obligation: an obligation that arises because another obligation is violated [Chisholm 1963].
 
-**Definition 7.9.** For each compensable rule $k \in K$, where $K$ is the set of compensable rules, *(proposed, OD-5: $K = \{R2, R3, R4, R5\}$)*:
+**Definition 7.9.** For each compensable rule $k \in K$, where $K$ is the set of compensable rules, *(proposed, OD-5: $K = \{R2, R3, R4\}$)*:
 
 $$\mathbf{O}\big(\exists c\ \mathsf{Valid}_t(c, \langle k, x\rangle) \mid \mathrm{App}_k(x) \land \lnot \mathrm{Req}_k(x)\big)$$
 
 The primary obligation $\mathbf{O}(\mathrm{Req}_k \mid \mathrm{App}_k)$ is not withdrawn when the secondary one is met. That is the formal content of "compensation does not erase the obligation".
+
+Rule 5 is not in $K$. Its requirement is the declaration of a premise, and a risk can be accepted only for a premise that is already declared. The evidence for a declared premise, where the context requires it, is part of $\mathrm{Req}_4$ through the adequacy policy (7.3.4), and its absence is compensable there.
 
 Contrary-to-duty structures are known to produce paradoxes when reasoned with inside standard deontic logic. The method avoids this by not reasoning *within* a deontic logic. The operators are a reading of the outcome function (7.5), which is defined directly over the record. No deontic inference is required to evaluate the method.
 
@@ -352,19 +362,21 @@ $$\varepsilon = (M, \rho, \alpha, \Pi, \Sigma_b, t, J)$$
 
 ## 7.7 Diagnosability
 
-Diagnosis starts from a failure $f$ and a set of *causal factors* $\Phi(f)$ identified by a causal analysis (incident analysis, debugging, root-cause investigation). The method does not identify causal factors; causal inference is outside its scope. What the method defines is how factors are related to the engineering record.
+Diagnosis starts from a failure $f$ and an *investigation record* produced by a causal analysis (incident analysis, debugging, root-cause investigation). It contains a set of *causal factors* $\Phi(f)$ and, for each factor $\varphi$, a status $\mathrm{st}(\varphi)$, either *established* or *provisional*, and a locus $\lambda(\varphi)$: the part of the system where the factor acts, or *undetermined*. The investigation may declare $\mathsf{Complete}(\Phi, f)$: the set of factors is final for this evaluation. The method does not identify causal factors and does not decide their status; causal inference is outside its scope. What the method defines is how factors are related to the engineering record.
 
-**Definition 7.17 (factor classification) (proposed, OD-1).** Let $\varepsilon_f$ be the evaluation input at the time of exposure (the snapshot and time before the failure). Each factor $\varphi \in \Phi(f)$ is classified as:
+**Definition 7.17 (factor classification) (proposed, OD-1).** Let $\varepsilon_f$ be the evaluation input at the time of exposure (the snapshot and time before the failure). A factor is *classifiable* if it is established and its locus is determined. Each classifiable factor $\varphi \in \Phi(f)$ is classified as:
 
 1. **gap**: $\varphi$ is linked to a subject $x$ for which some instance $\langle k, x\rangle$ is *violated* under $\varepsilon_f$ (this includes instances with a compensation that was invalid at the time), or *compensated* by a compensation whose stated risk does not cover $\varphi$;
 2. **accepted risk**: $\varphi$ is linked to a subject whose instance is *compensated* under $\varepsilon_f$ by a compensation whose stated risk covers $\varphi$, or to a declared assumption $s$ ($\mathsf{Declared}(s)$) that proved false. A compensation recorded after the failure is not in $\varepsilon_f$ and cannot place a factor in this class;
 3. **parameter misclassification**: $\varphi$ is linked to a subject whose instance was *not applicable* or *compensable* only because of a policy, and the consequence lies outside the declared risk tolerance (this classification is a recorded judgment);
 4. **external**: $\varphi$ lies outside the evaluated scope;
-5. **unrelated**: $\varphi$ lies within the scope but is not linked to any element of $\Sigma$.
+5. **unrelated** (missing engineering-context relationship): $\lambda(\varphi)$ lies within the scope and $\mathrm{val}\big(\exists y\ \mathsf{relates}(\varphi, y)\big) = \mathbf{f}$, that is, no element $y$ of $\Sigma$ relates to $\varphi$ and completeness is declared for the part of the scope that contains $\lambda(\varphi)$.
 
-If whether $\varphi$ is linked cannot be decided because evidence is inaccessible, the classification is *indeterminate*.
+A factor is *unresolved* if it is not classifiable (it is provisional, or its locus is undetermined), or if the value needed to place it in a class is $\mathbf{u}$ (for example because evidence is inaccessible or no completeness is declared).
 
-**Definition 7.18 (Rule 8 outcome) (proposed, OD-1).** For a failure $f$ in scope, the instance $\langle R8, f\rangle$ is *violated* if some factor is *unrelated*. It is *indeterminate* if no factor is unrelated and some classification is indeterminate. Otherwise it is *satisfied*.
+**Definition 7.18 (Rule 8 outcome) (proposed, OD-1).** For a failure $f$ in scope, the instance $\langle R8, f\rangle$ is *violated* if some factor is *unrelated*. It is *satisfied* if $\mathsf{Complete}(\Phi, f)$ is declared and every factor is classified in classes 1 to 4. Otherwise it is *indeterminate*.
+
+**Proposition 7.8 (no violation from causal uncertainty).** No *violated* outcome, of Rule 8 or of any other rule, depends on a provisional factor, on an undetermined locus, or on a relation whose value is $\mathbf{u}$. (Argument: class 5 requires an established factor, a determined locus and the value $\mathbf{f}$. The outcomes of Rules 1 to 7 are computed from $\varepsilon_f$, in which the investigation appears only through recorded judgments $J$ about established findings; a suspected finding gives $\mathbf{u}$, and by Proposition 7.5 a requirement with value $\mathbf{u}$ is never *violated*.) Consequently, while an investigation is open, establishing a factor or completing the analysis can change an *indeterminate* outcome of Rule 8 into *violated* or *satisfied*, but no new factor can undo a *violated* outcome, unless the analysis withdraws the factor it had established, which is a correction of the earlier evaluation.
 
 Rule 8 can therefore be satisfied while another rule is violated: a failure explained by a missing validation is *diagnosed*, and the diagnosis is what Rule 8 requires. The 0.2.1 definition $\mathsf{Diagnosable}(f) \iff \exists r\ \mathsf{ExplainsInMethodTerms}(r, f)$ corresponds to "some factor is classified 1, 2 or 3". It made a correct record whose failure had an external cause count as non-application of the method.
 

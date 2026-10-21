@@ -17,6 +17,7 @@
 - **Evaluación.** Un acto concreto de determinar los resultados de las instancias de obligación de una aplicación del método frente a una instantánea de la evidencia.
 - **Explícito.** Razonamiento de ingeniería capturado como registros trazables en lugar de permanecer no documentado o tácito.
 - **Explicitud.** La propiedad del trabajo de ingeniería de estar hecho explícito en una forma trazable, evaluable y diagnosticable.
+- **Factor causal.** Una condición que el análisis causal de un fallo identifica como contribuyente a él. Su estado es *establecido* o *provisional*. Solo los factores establecidos cuyo lugar en el sistema se conoce pueden relacionarse con el registro de ingeniería; los demás dejan el diagnóstico indeterminado (7.7).
 - **Fallo.** Una desviación observada del comportamiento o las restricciones intencionadas o requeridas que puede analizarse contra el razonamiento de ingeniería explícito.
 - **Indeterminada.** El resultado de una instancia de obligación cuando la evidencia disponible no la decide. No es ni una violación ni cumplimiento.
 - **Ingeniería de contexto.** La construcción, selección, preservación y entrega deliberadas del contexto relevante a una persona o sistema que lo necesita para actuar. Distinta del método (capítulo 10).

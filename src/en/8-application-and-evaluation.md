@@ -37,7 +37,7 @@ A parameter set (7.2.4) is a versioned record bound to the application. It has t
 | Impact and irreversibility | $\mathsf{Impactful}$, $\mathsf{Irreversible}$, $\mathsf{Balances}$ | "Impactful: affects a public API, a persisted data format, a security control or a dependency. Irreversible: data migrations without rollback." |
 | Behavior-affecting artifacts | $\mathsf{AffectsBehavior}$ | "Source, configuration, schemas, infrastructure code and models used for generation." |
 | Criticality | $\mathsf{Critical}$ | "Critical: anything under `payments/` or `auth/`, and any change to a regulated calculation." |
-| Validation adequacy | $\mathsf{Adequate}$ | "Critical artifacts: automated tests at the affected interface plus a review by someone other than the author." |
+| Validation adequacy | $\mathsf{Adequate}$ | "Critical artifacts: automated tests at the affected interface plus a review by someone other than the author. Declared assumptions a critical artifact relies on are validated or covered by a compensation of the artifact's Rule 4 instance." |
 | Compensation admissibility | $\mathsf{Admissible}$, $\mathsf{PermitsPermanent}$ | "Validation of dosage calculations is not compensable. Permanent acceptance is not permitted for critical artifacts." |
 | Risk-acceptance authority | $\mathsf{MayAccept}$ | "Risks on critical artifacts: the service owner or, during a declared incident, the incident commander. Never the change author alone." |
 
@@ -122,7 +122,7 @@ An illustrative serialization (non-normative; any format with the same content i
 ```yaml
 evaluation:
   method: ESEM 0.3.0
-  ruleset: {version: 0.3.0, interpretations: [OD-1/B, OD-2/B, OD-5/B, OD-6/A1+B1]}
+  ruleset: {version: 0.3.0, interpretations: [OD-1/D, OD-2/B, OD-5/D, OD-6/A1+B1]}
   scope:
     boundary: [orders-api, payment-adapter]
     change_set: {repo: git@example.org:shop/orders.git, from: v4.2.0, to: v4.3.0}

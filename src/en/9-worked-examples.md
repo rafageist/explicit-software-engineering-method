@@ -149,6 +149,8 @@ flowchart LR
 
 **Explanation.** The shortcut was allowed, and it was not silent. At t1 the record shows exactly which obligation was unmet, which risk was accepted, by whom, until when, and on the basis of which assumption. Compensation did not turn the obligation into a satisfied one. When C-9 expired, the instance became *violated* again; the obligation had not gone anywhere.
 
+S-20 shows the division proposed in OD-5. The premise that the trusted certificate authorities are not compromised is declared, so ⟨R5, S-20⟩ is *satisfied* throughout; C-9 could not have replaced that declaration. What C-9 accepts is the missing validation of `e5d`, an instance of Rule 4, on the basis of the declared premise.
+
 At t3 the remediation is in place and `f81` is satisfied. The historical instance for `e5d` remains *violated*, because between 17 Oct 02:38 and 19 Oct 11:00 a critical artifact was in operation without validation or a valid compensation. Two alternative courses would have kept ⟨R4, e5d⟩ *compensated* at t3. One is to deploy the remediation before 17 Oct 02:38 (Definition 7.13 evaluates validity at the end of the subject's exposure). The other is for the security officer to renew the acceptance before expiry, with a new compensation that supersedes C-9.
 
 **Variant (retroactive compensation).** Suppose C-9 had been written on 16 October, after the hotfix had been in operation for two days. It would be flagged as *retroactive* (OD-6). It counts from 16 October onward. If a failure caused by the disabled pinning had occurred on 15 October, C-9 could not place that factor in the *accepted risk* class (7.7).
@@ -205,7 +207,7 @@ The team could have declared completeness for the lost history. ⟨R3, picking.p
 **Context.** A fulfilment service consumes order messages from a managed message broker. On 3 September 2026, 214 orders are shipped twice (failure F-1).
 
 **Parameter set PS-fulfil v4 (excerpt).**
-*Boundary:* fulfilment service, its configuration, and the broker settings of the team's own account. The broker service itself is external. *Critical:* anything that can trigger a shipment. *Adequacy:* changes to message delivery semantics require an integration test that covers redelivery. *Completeness:* repository, CI and decision log (which also holds compensations) are complete since adoption in 2025.
+*Boundary:* fulfilment service, its configuration, and the broker settings of the team's own account. The broker service itself is external. *Critical:* anything that can trigger a shipment. *Adequacy:* changes to message delivery semantics require an integration test that covers redelivery, including the idempotency of the handlers that the change relies on. *Completeness:* repository, CI and decision log (which also holds compensations) are complete since adoption in 2025.
 
 **Records before the failure.**
 
@@ -224,6 +226,8 @@ Change ch-201 (20 August) produced `consumer.yaml@4c2`. No compensation was reco
 - φ2: `ship_order` is not idempotent, so redelivered messages created second shipments.
 - φ3: the broker service had a latency incident that day, which lengthened processing times (provider status page).
 - φ4: the broker's prefetch setting for the team's account had been raised from 10 to 50 through the provider's web console on 28 August. No version control or record exists for it; the analysis found it in the provider's audit log.
+
+The investigation record of 10 September marks φ1 to φ4 as *established*, gives the part of the system where each acts, and declares the set of factors final.
 
 ```mermaid
 flowchart LR
@@ -259,10 +263,12 @@ flowchart LR
 
 ⟨R8, F-1⟩ is **violated** under the proposed interpretation (OD-1), because φ4 cannot be related to the engineering record. Under the 0.2.1 text, Rule 8 would count as satisfied, because an "unvalidated artifact" is identifiable (φ1). That reading would hide that part of the system's behavior was changed outside the record.
 
+**Variant (investigation still open).** On 5 September, before the provider's audit log was obtained, the investigation record listed φ1 to φ3 as established and a fourth factor as *provisional*: "the consumption rate rose on 28 August for an unknown reason". Its locus was undetermined: the cause could lie in the broker service, which is external, or in the team's account, which is in scope. At that point the fourth factor is *unresolved*, and ⟨R8, F-1⟩ is *indeterminate*, not *violated*: what was missing was a finished analysis, not yet a relationship in the record. No other instance changes either. The unexplained rate is not a gap in ⟨R3⟩ or ⟨R4⟩ of any artifact, because nothing yet relates it to one (Proposition 7.8). When the audit log established the console change and placed it in the team's account, the factor became φ4, classifiable as *unrelated*, and ⟨R8, F-1⟩ became *violated*. Had the change been made by the provider, the factor would have been *external*. Once the set of factors was declared final, ⟨R8, F-1⟩ would then have been *satisfied*.
+
 **Explanation.** The diagnosis separates four things that a narrative ("a broker incident caused duplicates") would merge:
 
 - a *supported method-level gap* (φ1): a critical change shipped without the validation its context required;
-- a *declared premise that proved false* (φ2): the method worked, because the premise was visible, and the gap lies in relying on it unvalidated for a critical change (φ1), not in Rule 5;
+- a *declared premise that proved false* (φ2): the method worked, because the premise was visible, and the gap lies in relying on it unvalidated for a critical change (φ1), not in Rule 5. Under the proposed interpretation of OD-5, that evidence gap belongs to ⟨R4, consumer.yaml@4c2⟩, whose adequacy policy covers the idempotency the change relied on. A compensation for that instance, referencing S-201, would have been admissible; none was recorded. No compensation could have replaced the declaration of S-201;
 - an *external factor* (φ3), which the method neither explains nor needs to;
 - a part of the system's behavior *outside the engineering record* (φ4), which is what Rule 8 exists to expose.
 
@@ -278,6 +284,6 @@ One question remains open: whether `ship_order` was ever intended to be idempote
 |---|---|
 | A, code-first | order independence; retrospective provenance; counterfactual violation versus indeterminate under completeness |
 | B, model-first | same obligations in another workflow; validation bound to versions; non-compensable obligations by parameter |
-| C, emergency | compensation content, authority, expiry and remediation; obligation not erased; time-scoped validity; retroactive compensation |
+| C, emergency | compensation content, authority, expiry and remediation; obligation not erased; time-scoped validity; retroactive compensation; declared assumption with its evidence gap compensated under Rule 4 |
 | D, legacy | adoption boundary; no fabricated history; inferred versus reconstructed records; inconclusive verdict as an honest state |
-| E, failure | supported gaps versus declared false premises versus external and unrelated factors; Rule 8 under the 0.2.1 text and the proposed reading |
+| E, failure | supported gaps versus declared false premises versus external and unrelated factors; missing relationship versus incomplete investigation; Rule 8 under the 0.2.1 text and the proposed reading |

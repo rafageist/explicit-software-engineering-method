@@ -5,6 +5,7 @@
 - **Applicability.** The condition under which a rule applies to a subject. It is decided by a policy of the parameter set (7.3).
 - **Artifact.** A produced, versioned and inspectable work product. Artifacts that affect system behavior, as decided by the behavior-affecting policy, must be traceable to intent or decisions (Rule 3). Engineering records (intents, decisions, assumptions, validations, compensations) are typed by their role, not counted as artifacts.
 - **Assumption.** A statement treated as true for reasoning or planning when evidence is missing or deferred, and that must remain identifiable until validated or invalidated.
+- **Causal Factor.** A condition that a causal analysis of a failure identifies as contributing to it. Its status is *established* or *provisional*. Only established factors whose place in the system is known can be related to the engineering record; the others leave the diagnosis indeterminate (7.7).
 - **Compensation.** An explicit and auditable acceptance of risk for an unmet obligation instance, accepted by an authorized party and subject to a review condition. It does not remove the underlying obligation: the outcome is *compensated*, not *satisfied*.
 - **Context Engineering.** The deliberate construction, selection, preservation and delivery of relevant context to a person or system that needs it to act. Distinct from the method (chapter 10).
 - **Contextual Parameters.** The declared, versioned parameter set of a method application: context descriptors and the policies that decide the predicates the rules use.

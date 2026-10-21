@@ -37,7 +37,7 @@ Las **políticas** deciden los predicados que usan las reglas. Bajo OD-9, un con
 | Impacto e irreversibilidad | $\mathsf{Impactful}$, $\mathsf{Irreversible}$, $\mathsf{Balances}$ | "De impacto: afecta una API pública, un formato de datos persistido, un control de seguridad o una dependencia. Irreversible: migraciones de datos sin reversión." |
 | Artefactos que afectan el comportamiento | $\mathsf{AffectsBehavior}$ | "Código fuente, configuración, esquemas, código de infraestructura y modelos usados para generación." |
 | Criticidad | $\mathsf{Critical}$ | "Crítico: todo lo que esté bajo `payments/` o `auth/`, y cualquier cambio en un cálculo regulado." |
-| Adecuación de la validación | $\mathsf{Adequate}$ | "Artefactos críticos: pruebas automatizadas en la interfaz afectada más una revisión hecha por alguien distinto del autor." |
+| Adecuación de la validación | $\mathsf{Adequate}$ | "Artefactos críticos: pruebas automatizadas en la interfaz afectada más una revisión hecha por alguien distinto del autor. Los supuestos declarados de los que depende un artefacto crítico se validan o quedan cubiertos por una compensación de la instancia de la Regla 4 del artefacto." |
 | Admisibilidad de la compensación | $\mathsf{Admissible}$, $\mathsf{PermitsPermanent}$ | "La validación de cálculos de dosis no es compensable. No se permite la aceptación permanente para artefactos críticos." |
 | Autoridad de aceptación de riesgo | $\mathsf{MayAccept}$ | "Riesgos sobre artefactos críticos: el responsable del servicio o, durante un incidente declarado, el comandante del incidente. Nunca el autor del cambio por sí solo." |
 
@@ -122,7 +122,7 @@ Una serialización ilustrativa (no normativa; cualquier formato con el mismo con
 ```yaml
 evaluation:
   method: ESEM 0.3.0
-  ruleset: {version: 0.3.0, interpretations: [OD-1/B, OD-2/B, OD-5/B, OD-6/A1+B1]}
+  ruleset: {version: 0.3.0, interpretations: [OD-1/D, OD-2/B, OD-5/D, OD-6/A1+B1]}
   scope:
     boundary: [orders-api, payment-adapter]
     change_set: {repo: git@example.org:shop/orders.git, from: v4.2.0, to: v4.3.0}

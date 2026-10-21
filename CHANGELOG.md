@@ -8,13 +8,15 @@ Issues #1, #2, #3. Review findings `F-nn` refer to `docs/review-0.2.1.md`.
 
 ### Normative (proposed, pending decision)
 
-These changes are labeled in the text as *Proposed interpretation (OD-n)* and do not take effect until the maintainer decides. The 0.2.1 rule statements are unchanged.
+These changes are labeled in the text as *Proposed interpretation (OD-n)* and do not take effect until the maintainer gives final approval. The 0.2.1 rule statements are unchanged. In the review of PR #4, the recommendations for OD-2 to OD-4 and OD-6 to OD-12 were accepted as the basis for the next draft; OD-1 and OD-5 were refined as described below.
 
 - Rule 8 reinterpreted as diagnosability of the engineering record, with five factor classes. External factors and realized accepted risks no longer count as non-application of the method (OD-1; F-13, F-14).
+- Refinement of OD-1: a missing engineering-context relationship (an established factor, acting within scope, with no relation to a record declared complete) is distinguished from causal uncertainty and incomplete investigation. Factors are *established* or *provisional*; unresolved factors make Rule 8 *indeterminate*, and *satisfied* requires a final set of factors. Failure analysis never makes an obligation *violated* on its own (Proposition 7.8). Scenario E gains an *investigation still open* variant.
 - "Undocumented decisions are treated as assumptions" read as a diagnostic classification that does not discharge Rule 2 (OD-2; F-03).
 - Decision records must list alternatives or state that none were evaluated (OD-3; F-02).
 - Trade-offs governed as part of Rule 2 (OD-4; F-17).
-- Compensable rules: R2-R5. Rules 1 and 7 are not compensable (OD-5; F-04).
+- Compensable rules: R2-R4. Rules 1, 5 and 7 are not compensable (OD-5; F-04). Refinement of OD-5: the declaration of an assumption cannot be compensated; evidence gaps associated with a declared assumption are evaluated through the validation-adequacy policy under Rule 4 and compensated there. Scenarios C and E updated.
+- New open decisions raised by the refinements: OD-13 (adequacy policy and declared assumptions), OD-14 (final set of factors for Rule 8), OD-15 (changes made outside the record).
 - Compensation review condition, retroactive compensations and risk-acceptance authority (OD-6, OD-7; F-11).
 - Provenance classes; inferred records never satisfy obligations (OD-8).
 - Minimum parameter set for Rule 7 (OD-9; F-12).

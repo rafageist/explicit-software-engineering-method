@@ -180,6 +180,12 @@ $$\mathrm{Req}_4(x) \equiv \exists v\ \exists x'\ \big(\mathsf{validates}(v, x')
 
 Tres condiciones son nuevas respecto a 0.2.1 (revisión F-08). La validación queda ligada a una versión, porque los elementos de $A$ son versiones. La validación debe haber resultado satisfactoria: una ejecución de pruebas fallida es evidencia, pero no evidencia de que $x$ satisface su intención. La adecuación la decide la política de adecuación de la validación, lo que hace operativa la "profundidad de validación" de la Regla 7.
 
+La política de adecuación puede extenderse a las premisas de las que depende $x$, por ejemplo exigiendo
+
+$$\mathsf{Adequate}(v, x) \rightarrow \forall s\ \big(\mathsf{assumes}(x, s) \rightarrow \exists v'\ (\mathsf{validates}(v', s) \land \mathsf{Passed}(v'))\big)$$
+
+Aquí es donde se evalúan las brechas de evidencia asociadas a supuestos declarados, y por eso son compensables según la Regla 4 y no según la Regla 5 *(propuesta, OD-5)*.
+
 ### 7.3.5 Regla 5 - Declaración de supuestos
 
 $$\mathrm{App}_5(s) \equiv \exists x\ \mathsf{relies}(x, s) \land \lnot \exists v\ (\mathsf{validates}(v, s) \land \mathsf{Passed}(v))$$
@@ -187,6 +193,8 @@ $$\mathrm{App}_5(s) \equiv \exists x\ \mathsf{relies}(x, s) \land \lnot \exists 
 $$\mathrm{Req}_5(s) \equiv \mathsf{Declared}(s) \land \forall x\ (\mathsf{relies}(x, s) \rightarrow \mathsf{assumes}(x, s))$$
 
 La fórmula de 0.2.1 $\forall x\ (\mathsf{EvidenceMissing}(x) \rightarrow \exists s\ \mathsf{assumes}(x,s))$ cuantificaba sobre todas las entidades y no podía distinguir una premisa declarada de una no declarada (revisión F-09). El DEBERÍA sobre el seguimiento es una recomendación (7.4): un supuesto cuyo estado no se sigue se informa, pero no es una violación.
+
+La Regla 5 no es compensable *(propuesta, OD-5)*. $\mathrm{Req}_5$ pide solo la declaración y sus vínculos, no evidencia; un supuesto abierto y declarado lo satisface. Cuando $\mathsf{relies}(x, s)$ solo se conoce por un análisis de fallo, se cumple únicamente si el análisis lo ha establecido (7.7). Una dependencia sospechada da el valor $\mathbf{u}$.
 
 ### 7.3.6 Regla 6 - Compensación explícita
 
@@ -210,10 +218,10 @@ La Regla 8 se evalúa por fallo y depende de la clasificación definida en 7.7.
 | R2 | $d \in D$ | $\mathsf{Impactful} \lor \mathsf{Irreversible}$ | registrada, sirve a una intención, alternativas, trade-off | sí | se añaden irreversibilidad, alternativas y trade-off; la compensación sale de la fórmula |
 | R3 | $a \in A$ | $\mathsf{AffectsBehavior}$ | camino de justificación, navegable | sí | camino en lugar de arista directa; la compensación sale de la fórmula |
 | R4 | $x \in A \cup D$ | $\mathsf{Critical}$ | validación satisfactoria y adecuada de la misma versión | sí | se añaden versión, resultado y adecuación; dominio restringido |
-| R5 | $s \in S$ | se depende de él, sin validar | declarado y vinculado | sí | cuantifica sobre premisas, no sobre todas las entidades |
-| R6 | resultados de R1-R5, R7 | — | compensación válida | — | apunta a instancias de obligación |
+| R5 | $s \in S$ | se depende de él, sin validar | declarado y vinculado | no (brechas de evidencia según R4) | cuantifica sobre premisas, no sobre todas las entidades; la declaración no es compensable |
+| R6 | resultados de R2-R4 | — | compensación válida | — | apunta a instancias de obligación |
 | R7 | $\alpha$ | siempre | conjunto de parámetros explícito, versionado y completo | no | dirigida a la aplicación |
-| R8 | $f \in F$ | fallo dentro del alcance | todo factor clasificado | — | clasificación en lugar de una única razón |
+| R8 | $f \in F$ | fallo dentro del alcance | ningún factor establecido no relacionado; conjunto de factores definitivo | — | clasificación en lugar de una única razón; la incertidumbre es indeterminada |
 
 ---
 
@@ -238,11 +246,13 @@ Ejemplo (Regla 1): $\mathbf{O}\big(\exists i\ (\mathsf{declares}(ch,i) \land \ma
 
 La versión 0.2.1 escribía "$P(\mathsf{Missing}(x))$ IF $O(\exists c \ldots)$", que no es una fórmula deóntica bien formada. Lo que describe la prosa es una obligación *contraria al deber*: una obligación que surge porque se ha violado otra obligación [Chisholm 1963].
 
-**Definición 7.9.** Para cada regla compensable $k \in K$, donde $K$ es el conjunto de reglas compensables, *(propuesta, OD-5: $K = \{R2, R3, R4, R5\}$)*:
+**Definición 7.9.** Para cada regla compensable $k \in K$, donde $K$ es el conjunto de reglas compensables, *(propuesta, OD-5: $K = \{R2, R3, R4\}$)*:
 
 $$\mathbf{O}\big(\exists c\ \mathsf{Valid}_t(c, \langle k, x\rangle) \mid \mathrm{App}_k(x) \land \lnot \mathrm{Req}_k(x)\big)$$
 
 La obligación primaria $\mathbf{O}(\mathrm{Req}_k \mid \mathrm{App}_k)$ no se retira cuando se cumple la secundaria. Ese es el contenido formal de "la compensación no elimina la obligación".
+
+La Regla 5 no está en $K$. Su exigencia es la declaración de una premisa, y solo puede aceptarse un riesgo sobre una premisa ya declarada. La evidencia de una premisa declarada, cuando el contexto la exige, forma parte de $\mathrm{Req}_4$ a través de la política de adecuación (7.3.4), y su ausencia es compensable allí.
 
 Se sabe que las estructuras contrarias al deber producen paradojas cuando se razona con ellas dentro de la lógica deóntica estándar. El método lo evita al no razonar *dentro* de una lógica deóntica. Los operadores son una lectura de la función de resultado (7.5), que se define directamente sobre el registro. Evaluar el método no requiere ninguna inferencia deóntica.
 
@@ -352,19 +362,21 @@ $$\varepsilon = (M, \rho, \alpha, \Pi, \Sigma_b, t, J)$$
 
 ## 7.7 Diagnosabilidad
 
-El diagnóstico parte de un fallo $f$ y de un conjunto de *factores causales* $\Phi(f)$ identificados por un análisis causal (análisis de incidentes, depuración, investigación de causa raíz). El método no identifica factores causales; la inferencia causal queda fuera de su alcance. Lo que el método define es cómo se relacionan los factores con el registro de ingeniería.
+El diagnóstico parte de un fallo $f$ y de un *registro de investigación* producido por un análisis causal (análisis de incidentes, depuración, investigación de causa raíz). Contiene un conjunto de *factores causales* $\Phi(f)$ y, para cada factor $\varphi$, un estado $\mathrm{st}(\varphi)$, *establecido* o *provisional*, y un lugar $\lambda(\varphi)$: la parte del sistema donde actúa el factor, o *indeterminado*. La investigación puede declarar $\mathsf{Complete}(\Phi, f)$: el conjunto de factores es definitivo para esta evaluación. El método no identifica factores causales ni decide su estado; la inferencia causal queda fuera de su alcance. Lo que el método define es cómo se relacionan los factores con el registro de ingeniería.
 
-**Definición 7.17 (clasificación de factores) (propuesta, OD-1).** Sea $\varepsilon_f$ la entrada de evaluación en el momento de la exposición (la instantánea y el instante anteriores al fallo). Cada factor $\varphi \in \Phi(f)$ se clasifica como:
+**Definición 7.17 (clasificación de factores) (propuesta, OD-1).** Sea $\varepsilon_f$ la entrada de evaluación en el momento de la exposición (la instantánea y el instante anteriores al fallo). Un factor es *clasificable* si está establecido y su lugar está determinado. Cada factor clasificable $\varphi \in \Phi(f)$ se clasifica como:
 
 1. **brecha**: $\varphi$ está vinculado a un sujeto $x$ para el que alguna instancia $\langle k, x\rangle$ está *violada* bajo $\varepsilon_f$ (esto incluye instancias con una compensación que no era válida en ese momento), o *compensada* por una compensación cuyo riesgo declarado no cubre $\varphi$;
 2. **riesgo aceptado**: $\varphi$ está vinculado a un sujeto cuya instancia está *compensada* bajo $\varepsilon_f$ por una compensación cuyo riesgo declarado cubre $\varphi$, o a un supuesto declarado $s$ ($\mathsf{Declared}(s)$) que resultó falso. Una compensación registrada después del fallo no está en $\varepsilon_f$ y no puede situar un factor en esta clase;
 3. **clasificación errónea de parámetros**: $\varphi$ está vinculado a un sujeto cuya instancia fue *no aplicable* o *compensable* solo a causa de una política, y la consecuencia queda fuera de la tolerancia al riesgo declarada (esta clasificación es un juicio registrado);
 4. **externo**: $\varphi$ queda fuera del alcance evaluado;
-5. **no relacionado**: $\varphi$ está dentro del alcance pero no está vinculado a ningún elemento de $\Sigma$.
+5. **no relacionado** (relación faltante con el contexto de ingeniería): $\lambda(\varphi)$ está dentro del alcance y $\mathrm{val}\big(\exists y\ \mathsf{relates}(\varphi, y)\big) = \mathbf{f}$, es decir, ningún elemento $y$ de $\Sigma$ se relaciona con $\varphi$ y se ha declarado completitud para la parte del alcance que contiene $\lambda(\varphi)$.
 
-Si no puede decidirse si $\varphi$ está vinculado porque la evidencia es inaccesible, la clasificación es *indeterminada*.
+Un factor está *sin resolver* si no es clasificable (es provisional o su lugar está indeterminado), o si el valor necesario para situarlo en una clase es $\mathbf{u}$ (por ejemplo, porque la evidencia es inaccesible o no se ha declarado completitud).
 
-**Definición 7.18 (resultado de la Regla 8) (propuesta, OD-1).** Para un fallo $f$ dentro del alcance, la instancia $\langle R8, f\rangle$ está *violada* si algún factor es *no relacionado*. Está *indeterminada* si ningún factor es no relacionado y alguna clasificación es indeterminada. En otro caso está *satisfecha*.
+**Definición 7.18 (resultado de la Regla 8) (propuesta, OD-1).** Para un fallo $f$ dentro del alcance, la instancia $\langle R8, f\rangle$ está *violada* si algún factor es *no relacionado*. Está *satisfecha* si se ha declarado $\mathsf{Complete}(\Phi, f)$ y todos los factores están clasificados en las clases 1 a 4. En otro caso está *indeterminada*.
+
+**Proposición 7.8 (ninguna violación por incertidumbre causal).** Ningún resultado *violada*, de la Regla 8 ni de ninguna otra regla, depende de un factor provisional, de un lugar indeterminado o de una relación cuyo valor es $\mathbf{u}$. (Argumento: la clase 5 exige un factor establecido, un lugar determinado y el valor $\mathbf{f}$. Los resultados de las Reglas 1 a 7 se calculan a partir de $\varepsilon_f$, en la que la investigación aparece solo mediante juicios registrados $J$ sobre hallazgos establecidos; un hallazgo sospechado da $\mathbf{u}$, y por la Proposición 7.5 una exigencia con valor $\mathbf{u}$ nunca está *violada*.) En consecuencia, mientras una investigación está abierta, establecer un factor o completar el análisis puede convertir un resultado *indeterminada* de la Regla 8 en *violada* o *satisfecha*, pero ningún factor nuevo puede deshacer un resultado *violada*, salvo que el análisis retire un factor que había establecido, lo que es una corrección de la evaluación anterior.
 
 Por tanto, la Regla 8 puede estar satisfecha mientras otra regla está violada: un fallo explicado por una validación faltante está *diagnosticado*, y el diagnóstico es lo que exige la Regla 8. La definición de 0.2.1 $\mathsf{Diagnosable}(f) \iff \exists r\ \mathsf{ExplainsInMethodTerms}(r, f)$ corresponde a "algún factor se clasifica como 1, 2 o 3". Hacía que un registro correcto cuyo fallo tenía una causa externa contara como no aplicación del método.
 

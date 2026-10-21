@@ -1,6 +1,15 @@
 # Open Normative Decisions
 
-Status: pending maintainer decision. Not part of the manuscript.
+Status: under maintainer review. Not part of the manuscript.
+
+| Decision | Status (review of PR #4, 2026-10-21) |
+|---|---|
+| OD-2, OD-3, OD-4, OD-6, OD-7, OD-8, OD-9, OD-10, OD-11, OD-12 | Recommendation accepted as the basis for the next draft |
+| OD-1 | Refined: alternative D below, pending final approval |
+| OD-5 | Refined: alternative D below, pending final approval |
+| OD-13, OD-14, OD-15 | New, raised by the refinements of OD-1 and OD-5; pending decision |
+
+Until final approval, the manuscript keeps every interpretation labeled as *Proposed interpretation (OD-n)*. Removing the labels and incorporating the interpretations into the rule statements is a change to the method's normative identity and is done only after final approval.
 
 Each entry below is a question whose answer changes what the method requires. The 0.3 draft does not settle these questions silently. The manuscript keeps the 0.2.1 normative statements and adds the recommended interpretation, labeled *Proposed interpretation (OD-n)*, so the effect can be reviewed in context. Rejecting a recommendation means editing or removing the labeled paragraph; no other text depends on it unless noted.
 
@@ -19,9 +28,25 @@ Format: question, why it matters, alternatives, recommendation, where it appears
 - **B. Diagnosability of the record (recommended).** R8 obliges the engineering record to be sufficient to classify each identified causal factor of a failure as one of: method-level gap (violated or inadequately compensated obligation), realized accepted risk (valid compensation or declared assumption), parameter misclassification, external or out-of-scope factor, or *unrelated* (within scope but not relatable to any element of the record). R8 is violated only by unrelated factors. If a relation exists but its evidence is inaccessible, the outcome is indeterminate. A factor traced to a violated obligation is a *diagnosed* gap: R8 is satisfied because the failure is explained, while the other rule is violated.
 - **C. Demote R8 to an evaluation property.** Remove it from the rules and keep diagnosability as a derived measure of the record.
 
-**Recommendation.** B. It keeps R8 as an obligation with an identifiable addressee (the record), aligns with chapter 6, and stops treating realized accepted risk as a defect.
+**Recommendation (initial).** B. It keeps R8 as an obligation with an identifiable addressee (the record), aligns with chapter 6, and stops treating realized accepted risk as a defect.
 
-**Where.** Ch. 3.8, 6.6, 7.7, 9 (Scenario E).
+**Review.** B was accepted in principle, with one refinement: distinguish a missing engineering-context relationship from causal uncertainty or an incomplete failure investigation, and do not classify an obligation as violated merely because a causal factor cannot yet be reliably related to the engineering record.
+
+- **D. Diagnosability with established factors (recommended, refines B).**
+  - The causal analysis produces an investigation record: factors, each *established* or *provisional*, the place in the system where each acts (or *undetermined*), and optionally a declaration that the set of factors is final. The method does not decide any of these; it reads them.
+  - Only an established factor with a known place of action is classified. Classes 1 to 4 are those of B. Class 5, *unrelated*, now requires a decided absence: the place lies within scope, the record is declared complete for that part of the scope, and no element of it relates to the factor. This is the *missing engineering-context relationship*.
+  - A provisional factor, an undetermined place, inaccessible evidence or a missing completeness declaration leaves the factor *unresolved*.
+  - ⟨R8, f⟩ is *violated* if some factor is unrelated, *satisfied* if the set of factors is declared final and all are in classes 1 to 4, and *indeterminate* otherwise.
+  - The failure analysis never creates violations of other rules. Class 1 points to instances already violated on the record before the failure. Findings of the analysis enter the evaluation only as recorded judgments about established facts.
+
+**Normative implications of D.**
+1. Rule 8 is addressed to the record, and its violation now requires positive knowledge: an established factor and a decided absence of any relation. Causal uncertainty is never evidence against the team.
+2. An open investigation yields *indeterminate* for Rule 8, never *satisfied* (OD-14). The outcome changes only from *indeterminate* to another class as the analysis proceeds (Proposition 7.8).
+3. Rule 5 violations discovered through failure analysis (a hidden premise) require that the reliance on the premise be established. A suspected premise gives *indeterminate* (ch. 3.5, 7.3.5).
+4. Evaluators need a completeness declaration for the part of the scope where an unrelated factor acts. Without it, Rule 8 is *indeterminate*, as for any other rule (Proposition 7.2).
+5. A change made outside the record (for example through a provider console) is reported under Rule 8 only. Whether it also produces instances of Rules 1 and 3 is OD-15.
+
+**Where.** Ch. 3.5, 3.8, 6.6, 7.7 (Definitions 7.17, 7.18, Proposition 7.8), 8.6, 9 (Scenario E and its variant), glossary (*causal factor*).
 
 ---
 
@@ -80,9 +105,22 @@ Format: question, why it matters, alternatives, recommendation, where it appears
 
 Independently of the alternative chosen, parameters MAY declare further obligations as non-compensable in a given context (for example, validation of safety functions).
 
-**Recommendation.** B.
+**Recommendation (initial).** B.
 
-**Where.** Ch. 3.6, 7.4, 8.5. Formal: the set `K` of compensable rules.
+**Review.** Reconsider the compensability of Rule 5. The minimum obligation to identify and declare an assumption should not disappear through compensation. Distinguish the declaration of an assumption from compensable validation or evidence gaps associated with it.
+
+- **D. R2, R3, R4 compensable; R1, R5, R7 not; evidence gaps of assumptions compensated under R4 (recommended, refines B).**
+  - Rule 5 requires the declaration: the premise is recorded as an assumption and linked to the elements that rely on it. It does not require evidence; an open, declared assumption satisfies it. The declaration cannot be compensated, because only a premise that has been declared can be the object of an accepted risk. A compensation whose risk statement mentions a premise does not count as declaring it.
+  - Where the context requires evidence for a premise (a critical element relies on it), the validation-adequacy policy may include that evidence in the Rule 4 requirement of the element. The gap is then an instance of Rule 4, compensable under Rule 6, and the compensation references the declared assumption.
+  - Tracking assumption status stays a SHOULD.
+
+**Normative implications of D.**
+1. $K = \{R2, R3, R4\}$. An undeclared premise that an element is established to rely on leaves the Rule 5 instance *violated* whatever compensations exist.
+2. No outcome can be *compensated* under Rule 5. A case that B would have reported as *compensated* under Rule 5 is *satisfied* if the compensation itself recorded the premise as an assumption, and *violated* otherwise. Compared with B this is a tightening; compared with 0.2.1, whose formulas allowed compensation everywhere, it removes a way of meeting Rule 5. Under the versioning policy (OD-11) it is a normative change.
+3. Evidence for premises becomes a matter of the validation-adequacy policy. If the policy does not mention premises, a declared but unvalidated premise produces no gap anywhere: the risk is visible but not required to be validated. Whether the policy must address premises is OD-13.
+4. Scenario C (S-20 with C-9 under R4) and Scenario E (S-201 and ⟨R4, consumer.yaml@4c2⟩) illustrate the split.
+
+**Where.** Ch. 3.1, 3.5, 3.6, 7.3.4, 7.3.5, 7.3.9, 7.4.2, 8.3, 9 (Scenarios C and E). Formal: the set `K` of compensable rules.
 
 ---
 
@@ -195,7 +233,56 @@ Independently of the alternative chosen, parameters MAY declare further obligati
 
 ---
 
-## Non-normative decisions needed for the pull request
+## OD-13. Validation adequacy and declared assumptions
 
-- **Version number.** The draft uses `0.3.0-draft` in `manifest.yaml`. Choose the final number at release time.
-- **Release gating.** The workflow now publishes only on a `v*` tag that matches the manifest, or on manual dispatch (review F-33). Confirm that this replaces the previous publish-on-push behavior.
+Raised by OD-5/D.
+
+**Question.** Must the validation-adequacy policy state how it treats declared assumptions that critical subjects rely on?
+
+**Alternatives.**
+- **A. Optional (current draft text).** The policy MAY require that such premises be validated. If it is silent, declared premises create no Rule 4 gap.
+- **B. Mandatory coverage (recommended).** As part of OD-9, the adequacy policy MUST state whether, and which, premises of critical subjects require validation. The answer may be "none". A policy that is silent leaves the affected Rule 4 instances *indeterminate*.
+- **C. Method constant.** Every premise a critical subject relies on MUST be validated or compensated under Rule 4.
+
+**Recommendation.** B. It keeps strictness contextual (Rule 7) while making the choice explicit, so that a reliance on unvalidated premises in critical work is a declared policy rather than an omission. C would make the strictness of every context identical on this point.
+
+**Where.** Ch. 3.5, 7.3.4, 8.3.
+
+---
+
+## OD-14. Final set of factors for Rule 8
+
+Raised by OD-1/D.
+
+**Question.** Can ⟨R8, f⟩ be *satisfied* before the investigation declares its set of factors final?
+
+**Alternatives.**
+- **A. No (recommended, current draft text).** *Satisfied* requires the declaration. Without it, the outcome is *indeterminate* unless a factor is already unrelated.
+- **B. Yes.** *Satisfied* when every factor identified so far is in classes 1 to 4. A later factor can turn it into *violated*.
+
+**Recommendation.** A. Under B a *satisfied* outcome could later become *violated* without any error in the earlier evaluation, which breaks the monotonicity that the rest of the evaluation semantics guarantees (Proposition 7.3). The declaration is made by the investigation, not by the method, and can be withdrawn as a correction.
+
+**Where.** Ch. 3.8, 7.7 (Definition 7.18).
+
+---
+
+## OD-15. Changes made outside the engineering record
+
+Raised by OD-1/D.
+
+**Question.** When failure analysis establishes a change within the scope that was made outside the record (for example a setting changed through a provider console), is it only a Rule 8 finding, or also an engineering change subject to Rules 1 and 3?
+
+**Alternatives.**
+- **A. Rule 8 only (recommended, current draft text).** The change set of an evaluation is defined by its declared sources and baselines (8.2). A change outside them is exposed by Rule 8 as a missing engineering-context relationship.
+- **B. Also an engineering change.** Once established, the change is added to the change set; ⟨R1⟩ and ⟨R3⟩ instances are created for it and are *violated*.
+
+**Recommendation.** A for the method, with B available as a scope policy. Under B a single unrecorded change would produce several violations for one omission, and the size of the change set would depend on what failure analyses happen to find. A team that wants out-of-band changes to count as changes can declare it in its scope.
+
+**Where.** Ch. 7.7, 8.2, 9 (Scenario E).
+
+---
+
+## Non-normative decisions
+
+- **Version number.** Retained as `0.3.0-draft` in `manifest.yaml` (review of PR #4). Choose the final number at release time.
+- **Release gating.** Confirmed in the review of PR #4: the workflow publishes only on a `v*` tag that matches the manifest, or on manual dispatch (review F-33).

@@ -149,6 +149,8 @@ flowchart LR
 
 **Explicación.** El atajo estaba permitido y no fue silencioso. En t1 el registro muestra exactamente qué obligación no se cumplía, qué riesgo se aceptó, quién lo aceptó, hasta cuándo y sobre la base de qué supuesto. La compensación no convirtió la obligación en una satisfecha. Cuando C-9 expiró, la instancia volvió a estar *violada*; la obligación no había desaparecido.
 
+S-20 muestra la división que propone OD-5. La premisa de que las autoridades de certificación de confianza no están comprometidas está declarada, así que ⟨R5, S-20⟩ está *satisfecha* en todo momento; C-9 no podría haber sustituido esa declaración. Lo que C-9 acepta es la validación faltante de `e5d`, una instancia de la Regla 4, sobre la base de la premisa declarada.
+
 En t3 la remediación está en su lugar y `f81` está satisfecha. La instancia histórica de `e5d` sigue *violada*, porque entre el 17 oct 02:38 y el 19 oct 11:00 un artefacto crítico estuvo en operación sin validación ni compensación válida. Dos cursos alternativos habrían mantenido ⟨R4, e5d⟩ *compensada* en t3. Uno es desplegar la remediación antes del 17 oct 02:38 (la Definición 7.13 evalúa la validez al final de la exposición del sujeto). El otro es que el responsable de seguridad renueve la aceptación antes de la expiración, con una nueva compensación que sustituya a C-9.
 
 **Variante (compensación retroactiva).** Supóngase que C-9 se hubiera escrito el 16 de octubre, después de que el hotfix llevara dos días en operación. Se marcaría como *retroactiva* (OD-6). Cuenta a partir del 16 de octubre. Si un fallo causado por el pinning desactivado hubiera ocurrido el 15 de octubre, C-9 no podría situar ese factor en la clase *riesgo aceptado* (7.7).
@@ -205,7 +207,7 @@ El equipo podría haber declarado completitud para el historial perdido. ⟨R3, 
 **Contexto.** Un servicio de despacho consume mensajes de pedidos desde un broker de mensajería gestionado. El 3 de septiembre de 2026, 214 pedidos se envían dos veces (fallo F-1).
 
 **Conjunto de parámetros PS-fulfil v4 (extracto).**
-*Frontera:* el servicio de despacho, su configuración y los ajustes del broker en la cuenta propia del equipo. El servicio de broker en sí es externo. *Crítico:* todo lo que pueda desencadenar un envío. *Adecuación:* los cambios en la semántica de entrega de mensajes requieren una prueba de integración que cubra la reentrega. *Completitud:* el repositorio, la CI y el registro de decisiones (que también contiene las compensaciones) son completos desde la adopción en 2025.
+*Frontera:* el servicio de despacho, su configuración y los ajustes del broker en la cuenta propia del equipo. El servicio de broker en sí es externo. *Crítico:* todo lo que pueda desencadenar un envío. *Adecuación:* los cambios en la semántica de entrega de mensajes requieren una prueba de integración que cubra la reentrega, incluida la idempotencia de los manejadores de los que depende el cambio. *Completitud:* el repositorio, la CI y el registro de decisiones (que también contiene las compensaciones) son completos desde la adopción en 2025.
 
 **Registros anteriores al fallo.**
 
@@ -224,6 +226,8 @@ El cambio ch-201 (20 de agosto) produjo `consumer.yaml@4c2`. No se registró nin
 - φ2: `ship_order` no es idempotente, por lo que los mensajes reentregados crearon segundos envíos.
 - φ3: el servicio de broker tuvo ese día un incidente de latencia que alargó los tiempos de procesamiento (página de estado del proveedor).
 - φ4: el ajuste de prefetch del broker para la cuenta del equipo se había elevado de 10 a 50 mediante la consola web del proveedor el 28 de agosto. No existe control de versiones ni registro de ello; el análisis lo encontró en el registro de auditoría del proveedor.
+
+El registro de investigación del 10 de septiembre marca φ1 a φ4 como *establecidos*, indica la parte del sistema donde actúa cada uno y declara definitivo el conjunto de factores.
 
 ```mermaid
 flowchart LR
@@ -259,10 +263,12 @@ flowchart LR
 
 ⟨R8, F-1⟩ está **violada** según la interpretación propuesta (OD-1), porque φ4 no puede relacionarse con el registro de ingeniería. Según el texto 0.2.1, la Regla 8 contaría como satisfecha, porque un "artefacto no validado" es identificable (φ1). Esa lectura ocultaría que parte del comportamiento del sistema se modificó fuera del registro.
 
+**Variante (investigación todavía abierta).** El 5 de septiembre, antes de obtener el registro de auditoría del proveedor, el registro de investigación listaba φ1 a φ3 como establecidos y un cuarto factor como *provisional*: "la tasa de consumo aumentó el 28 de agosto por una razón desconocida". Su lugar estaba indeterminado: la causa podía estar en el servicio de broker, que es externo, o en la cuenta del equipo, que está dentro del alcance. En ese momento el cuarto factor está *sin resolver*, y ⟨R8, F-1⟩ está *indeterminada*, no *violada*: lo que faltaba era un análisis terminado, todavía no una relación en el registro. Tampoco cambia ninguna otra instancia. La tasa sin explicar no es una brecha de ⟨R3⟩ ni de ⟨R4⟩ de ningún artefacto, porque todavía nada la relaciona con uno (Proposición 7.8). Cuando el registro de auditoría estableció el cambio en la consola y lo situó en la cuenta del equipo, el factor pasó a ser φ4, clasificable como *no relacionado*, y ⟨R8, F-1⟩ pasó a estar *violada*. Si el cambio lo hubiera hecho el proveedor, el factor habría sido *externo*. Una vez declarado definitivo el conjunto de factores, ⟨R8, F-1⟩ habría estado entonces *satisfecha*.
+
 **Explicación.** El diagnóstico separa cuatro cosas que una narrativa ("un incidente del broker causó duplicados") fundiría en una:
 
 - una *brecha a nivel de método sustentada* (φ1): un cambio crítico se entregó sin la validación que su contexto exigía;
-- una *premisa declarada que resultó falsa* (φ2): el método funcionó, porque la premisa era visible, y la brecha está en depender de ella sin validarla para un cambio crítico (φ1), no en la Regla 5;
+- una *premisa declarada que resultó falsa* (φ2): el método funcionó, porque la premisa era visible, y la brecha está en depender de ella sin validarla para un cambio crítico (φ1), no en la Regla 5. Según la interpretación propuesta de OD-5, esa brecha de evidencia pertenece a ⟨R4, consumer.yaml@4c2⟩, cuya política de adecuación cubre la idempotencia de la que dependía el cambio. Una compensación para esa instancia, que referenciara S-201, habría sido admisible; no se registró ninguna. Ninguna compensación podría haber sustituido la declaración de S-201;
 - un *factor externo* (φ3), que el método ni explica ni necesita explicar;
 - una parte del comportamiento del sistema *fuera del registro de ingeniería* (φ4), que es lo que la Regla 8 existe para exponer.
 
@@ -278,6 +284,6 @@ Queda una pregunta abierta: si alguna vez se pretendió que `ship_order` fuera i
 |---|---|
 | A, desde el código | independencia del orden; procedencia retrospectiva; violación contrafáctica frente a indeterminación según la completitud |
 | B, desde modelos | mismas obligaciones en otro flujo de trabajo; validación ligada a versiones; obligaciones no compensables por parámetro |
-| C, emergencia | contenido, autoridad, expiración y remediación de la compensación; obligación no borrada; validez acotada en el tiempo; compensación retroactiva |
+| C, emergencia | contenido, autoridad, expiración y remediación de la compensación; obligación no borrada; validez acotada en el tiempo; compensación retroactiva; supuesto declarado con su brecha de evidencia compensada según la Regla 4 |
 | D, heredado | frontera de adopción; sin historia fabricada; registros inferidos frente a reconstruidos; veredicto no concluyente como estado honesto |
-| E, fallo | brechas sustentadas frente a premisas declaradas falsas frente a factores externos y no relacionados; Regla 8 según el texto 0.2.1 y la lectura propuesta |
+| E, fallo | brechas sustentadas frente a premisas declaradas falsas frente a factores externos y no relacionados; relación faltante frente a investigación incompleta; Regla 8 según el texto 0.2.1 y la lectura propuesta |

@@ -32,7 +32,7 @@ In another case, a late-stage defect is attributed to "rushed changes." The narr
 
 ## 6.4 Method-Level Responsibility
 
-When a system fails, responsibility can be assessed at the level of the method: whether intent was declared and understood, decisions were explicit and justified, assumptions were identified and tracked, validation matched the risk, compensations were explicit, and contextual parameters were realistic. If these questions cannot be answered, the method was not fully applied. Failure, in that case, is not mysterious; it is expected.
+When a system fails, responsibility can be assessed at the level of the method: whether intent was declared and understood, decisions were explicit and justified, assumptions were identified and tracked, validation matched the risk, compensations were explicit, and contextual parameters were realistic. If these questions cannot be answered from the record, the method was not fully applied. Failure, in that case, is not mysterious: it happened in a system whose reasoning was not available for inspection.
 
 This does not imply negligence. It indicates where the engineering record was incomplete and where obligations were not met or were accepted without explicit compensation. The method makes that gap visible so it can be evaluated and corrected.
 
@@ -44,7 +44,21 @@ Because failure becomes explainable, it becomes reusable. Teams can learn across
 
 ---
 
-## 6.6 Summary
+## 6.6 Limits of Diagnosability
+
+Diagnosability has limits, and the method states them rather than hiding them.
+
+- **The method does not find causes.** Causal factors come from incident analysis, debugging or investigation. The method relates those factors to the engineering record and states what the record explains, what it accepted as risk, and what it cannot explain (7.7).
+- **Not every failure has a method-level cause.** Hardware faults, provider incidents and other external factors can cause failures in systems whose engineering record is complete. A failure that realizes a risk accepted through a valid compensation, or a premise declared as an assumption, is the method working, not failing. The 0.2.1 wording of Rule 8 does not distinguish these cases; chapter 3.8 proposes an interpretation that does (OD-1).
+- **Evidence can be missing or inaccessible.** When the record cannot decide a question, the diagnosis says so. An unanswerable question is reported as indeterminate, not resolved by narrative.
+- **Hindsight distorts judgment.** After a failure, decisions look worse and risks look more obvious than they were [Fischhoff 1975; Dekker 2006]. Judging a decision as invalid must rest on the record available when it was made.
+- **Diagnosis is not exhaustive.** Relating identified factors to the record does not show that all factors were identified, or that any one was sufficient.
+
+Within these limits, the claim of this chapter stands: where the record exists, failure can be explained in engineering terms; where it does not, its absence is itself the finding.
+
+---
+
+## 6.7 Summary
 
 Failure is inevitable; opacity is optional. The method does not dictate how teams work, but it dictates what must be explicit for work to be engineering. When failure occurs, it must be explainable in method terms; engineering maturity grows from diagnosed failure, not avoided failure.
 

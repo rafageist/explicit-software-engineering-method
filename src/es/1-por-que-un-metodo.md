@@ -1,4 +1,4 @@
-﻿# 1. Por qué esto es un método
+# 1. Por qué esto es un método
 
 Este trabajo se enmarca deliberadamente como un método porque apunta a la responsabilidad de ingeniería, no a la coordinación de flujos de trabajo ni a la justificación académica. La distinción es operativa: determina qué puede evaluarse y cómo se puede verificar el cumplimiento en organizaciones y prácticas distintas. Un proceso puede organizar el trabajo, pero un método determina si el resultado de ingeniería es responsable.
 
@@ -23,6 +23,6 @@ Este enfoque no es un rechazo de Agile, Scrum, RUP ni de ningún otro enfoque or
 La separación es práctica: las decisiones organizacionales optimizan la coordinación, mientras que la responsabilidad de ingeniería requiere una base estable de evaluación sin importar el estilo de coordinación.
 
 ## 1.5 El método como función evaluativa
-En su núcleo, un método puede actuar como una función evaluativa: dado un conjunto de artefactos de ingeniería y un contexto, puede determinar si se cumplieron las obligaciones y dónde falta responsabilidad. Esta perspectiva motiva un método por encima del proceso y prepara el terreno para distinguir software que solo funciona de software que califica como producto de ingeniería.
+En su núcleo, un método puede actuar como una función evaluativa: dado un conjunto de artefactos de ingeniería y un contexto declarado explícitamente, puede determinar si se cumplieron las obligaciones, dónde falta responsabilidad y dónde la evidencia disponible no basta para decidir. Esta perspectiva motiva un método por encima del proceso y prepara el terreno para distinguir software que solo funciona de software que califica como producto de ingeniería.
 
 En conjunto, estos puntos muestran por qué un método es la abstracción correcta: preserva la responsabilidad a través de distintas formas de organizar el trabajo y hace evaluables los resultados de ingeniería. Con esa base, el siguiente paso es aclarar el límite entre software que funciona y software que califica como producto de ingeniería.

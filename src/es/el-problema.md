@@ -1,4 +1,4 @@
-﻿# 0. El problema
+# 0. El problema
 
 ## 0.1 Situación
 
@@ -21,9 +21,11 @@ Las consecuencias del razonamiento implícito incluyen:
 
 Dado el problema central, la hipótesis es: si el razonamiento de ingeniería se hace explícito y exigible, independiente del proceso o del flujo de trabajo, entonces los resultados de software pueden evaluarse como productos de ingeniería y los fallos pueden diagnosticarse con responsabilidad en lugar de narrativa.
 
+Esto es una hipótesis. Este manuscrito argumenta a su favor y define los medios para evaluarla: obligaciones, semántica de evaluación y ejemplos desarrollados. No aporta evidencia empírica de que aplicar el método mejore los resultados. Las afirmaciones de otras partes sobre lo que el método mejora son expectativas derivadas de la hipótesis, no resultados demostrados.
+
 ## 0.4 Objetivo
 
-El objetivo es definir un método mínimo, normativo y ortogonal al proceso que especifique obligaciones y consecuencias y haga el trabajo de ingeniería evaluable objetivamente.
+El objetivo es definir un método mínimo, normativo y ortogonal al proceso que especifique obligaciones y consecuencias y haga el trabajo de ingeniería evaluable frente a un contexto declarado explícitamente, con resultados que puedan reproducirse a partir de la misma evidencia y discutirse en los mismos términos.
 
 ## 0.5 Alcance y no objetivos
 

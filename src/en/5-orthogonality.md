@@ -18,5 +18,7 @@ This makes incremental adoption possible: a team can introduce explicit reasonin
 ## 5.4 What Orthogonality Does and Does Not Mean
 Orthogonality does not mean anything goes. Obligations still apply, and missing reasoning remains a gap regardless of how the work was organized. The method is strict about outcomes while remaining flexible about paths.
 
+Orthogonality has one deliberate limit. When an intent, decision, assumption or validation was recorded does not change any outcome: an intent written after the code is as valid as one written before it (chapter 9, Scenarios A and B; Proposition 7.7). Compensation is different. Accepting a risk means something only before exposure to it, so a compensation counts from the moment it is recorded, and one recorded after the fact is flagged as retroactive (OD-6). This does not prescribe an order of activities. It recognizes that accepting a risk is itself an act located in time.
+
 ## 5.5 Summary
 Orthogonality makes the method applicable across teams, domains, and processes because it evaluates engineering state rather than activity sequence. It enables post-failure reconstruction by allowing accountability to be assessed even when the original work unfolded non-linearly. This is what allows the method to be universal without becoming prescriptive about workflow.

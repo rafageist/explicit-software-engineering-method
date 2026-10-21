@@ -1,11 +1,11 @@
-﻿The Explicit Software Engineering Method is a prescriptive set of rules that defines what engineering work must be made explicit, how artifacts must relate to intent and decisions, and how absences must be compensated, in order for software to qualify as an engineered product rather than incidental functionality. It operates orthogonally to process frameworks by constraining what must be traceable and validated regardless of workflow sequence, accepting contextual parameters that shape the required level of explicitness without imposing a fixed lifecycle. The method transforms failure from narrative into evidence-based diagnosis by making intent, decisions, assumptions, trade-offs, and validation explicit and navigable, enabling systematic quality assessment and cumulative learning. By defining obligations and their consequences rather than activities, the method ensures that engineering reasoning is preserved as analyzable infrastructure across any development process. It exists to bridge the gap between software as executable output and software product as accountable engineering outcome.
+The Explicit Software Engineering Method is a prescriptive set of rules that defines what engineering work must be made explicit, how artifacts must relate to intent and decisions, and how absences must be compensated, in order for software to qualify as an engineered product rather than incidental functionality. It operates orthogonally to process frameworks by constraining what must be traceable and validated regardless of workflow sequence, accepting contextual parameters that shape the required level of explicitness without imposing a fixed lifecycle. The method transforms failure from narrative into evidence-based diagnosis by making intent, decisions, assumptions, trade-offs, and validation explicit and navigable, enabling systematic quality assessment and cumulative learning. By defining obligations and their consequences rather than activities, the method ensures that engineering reasoning is preserved as analyzable infrastructure across any development process. It exists to bridge the gap between software as executable output and software product as accountable engineering outcome.
 
 This definition is normative.
 
 # Explicit Software Engineering Method
 
 ## 1. Overview
-The Explicit Software Engineering Method defines a minimal, executable set of rules for making engineering intent, decisions, and trade-offs explicit and traceable across the software lifecycle.
+The Explicit Software Engineering Method defines a minimal, evaluable set of rules for making engineering intent, decisions, and trade-offs explicit and traceable across the software lifecycle.
 It addresses a structural problem: critical engineering work often remains implicit, leaving quality, accountability, and learning dependent on tacit knowledge rather than evidence.
 Implicitness is structural because delivery pressure and tooling defaults reward output over explicit reasoning, so implicit work accumulates unless a method enforces explicitness.
 
@@ -35,7 +35,8 @@ Explicitness enables quality, traceability, and learning because the work can be
 - Trade-off: a deliberate balance between competing constraints or quality attributes.
 - Validation: evidence that an artifact or decision satisfies its stated intent.
 - Traceability: explicit, navigable links among intents, decisions, assumptions, artifacts, and validations.
-- Compensation: explicit documentation of missing artifacts or validations with stated accepted risk.
+- Compensation: explicit, authorized acceptance of the risk of an unmet obligation; it does not remove the obligation.
+- Obligation instance: a rule applied to one subject; evaluation gives it one outcome: satisfied, violated, compensated, not applicable or indeterminate.
 
 ## 6. Method as Infrastructure
 The method treats engineering as infrastructure: it defines enforceable rules about what must be explicit, how artifacts relate, and how gaps are compensated.
@@ -46,19 +47,31 @@ The method accepts contextual parameters (domain criticality, risk tolerance, re
 Explicitness, effort, and risk are balanced rather than maximized; quality is optimized for context, not for maximal rigor.
 
 ## 8. Relationship to Standards
-The method is compatible with IEEE and ISO software engineering process standards.
-Standards define required activities and work products; this method defines how those activities and products become explicit, traceable, and analyzable in execution.
-Process frameworks can host the method, but the method specifies the rules that make execution verifiable.
+The method is designed to operate within IEEE and ISO software engineering standards. Several of them already ask for recorded decisions, rationale, traceability and risk acceptance (for example ISO/IEC/IEEE 12207, 15288, 42010, 29148, IEEE 1012). The method adds an evaluation of the resulting record that is independent of the process that produced it, explicit semantics for compensation and missing evidence, and a defined relation between failure and the record. It is not a conformity assessment scheme. See chapter 4.
 
 ## 9. Expected Outcomes
-- Improves: clarity of intent, consistency of artifacts, objective assessment of engineering quality, and reuse of knowledge across projects.
-- Diagnosable failures: missing assumptions, invalid decisions, unvalidated artifacts, and unbalanced trade-offs become observable causes rather than after-the-fact narratives.
+These are expected outcomes that follow from the method's hypothesis (chapter 0); they have not been demonstrated empirically.
+- Improves: clarity of intent, consistency of artifacts, evidence-based assessment of engineering quality against a declared context, and reuse of knowledge across projects.
+- Diagnosable failures: causal factors identified by failure analysis can be related to the engineering record, as missing intent, unrecorded decisions, unvalidated artifacts, false assumptions or unbalanced trade-offs, or as external factors the record does not need to explain.
 - Newly visible: rationale, risk exposure, and the actual cost of shortcuts that were previously implicit.
 
 ## 10. Scope and Evolution
 The current scope defines the minimal concepts, explicitness rules, and traceability needed to make engineering work analyzable.
 The method is intentionally minimal at this stage and does not prescribe a full lifecycle model.
-Tooling (for example, Divengine Studio) is an implementation of the method, not the method itself.
+Tooling (for example, Divengine Studio) may implement an evaluator of the method; it is not the method itself, and the method does not depend on it.
 
 ## 11. Normative Core Rules (Draft)
-See `src/en/3-normative-rules.md` (English) and `src/es/3-reglas-normativas.md` (Spanish copy).
+See `src/en/3-normative-rules.md` (English) and `src/es/3-reglas-normativas.md` (Spanish edition). The formal semantics are in chapter 7, the evaluation contract in chapter 8 and worked examples in chapter 9.
+
+## 12. Status of Version 0.3 (Draft)
+Version 0.3 keeps the eight rules of 0.2.1 unchanged and makes them evaluable: applicability through declared policies, evaluation under incomplete evidence, compensation that never erases an obligation, and versioned, reproducible evaluations. Interpretations that would change the meaning of a rule are labeled *Proposed interpretation (OD-n)* and are pending maintainer decision:
+
+- `docs/review-0.2.1.md`: review of 0.2.1 and its inconsistencies.
+- `docs/open-decisions.md`: open normative decisions, with alternatives and recommendations.
+- `CHANGELOG.md`: changes by kind (normative, clarifying, editorial).
+
+## 13. Repository and Build
+- `src/en`, `src/es`: the English and Spanish editions. Both express the same normative content; `make check` verifies structure and formulas.
+- `scripts/build_pdf.py`: PDF build (pandoc, XeLaTeX, wkhtmltopdf, Mermaid CLI). `make tex` produces LaTeX only.
+- `Dockerfile`, `make docker-pdf`: the CI toolchain, for reproducible local builds.
+- Releases are published only from a `v*` tag that matches `manifest.yaml`; see `docs/release-checklist.md`.

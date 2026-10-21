@@ -1,4 +1,4 @@
-﻿# 5. Ortogonalidad respecto a marcos de proceso
+# 5. Ortogonalidad respecto a marcos de proceso
 
 La ortogonalidad aquí es una propiedad estructural: el método evalúa el estado de ingeniería independientemente de la secuencia usada para llegar a él. La flexibilidad de orden no elimina la obligación; solo significa que hay múltiples caminos válidos hacia un resultado conforme.
 
@@ -17,6 +17,8 @@ Esto hace posible la adopción incremental: un equipo puede introducir razonamie
 
 ## 5.4 Lo que significa y no significa la ortogonalidad
 La ortogonalidad no significa que todo vale. Las obligaciones siguen aplicando, y el razonamiento faltante sigue siendo una brecha independientemente de cómo se organizó el trabajo. El método es estricto con los resultados y flexible con los caminos.
+
+La ortogonalidad tiene un límite deliberado. El momento en que se registró una intención, decisión, supuesto o validación no cambia ningún resultado: una intención escrita después del código es tan válida como una escrita antes (capítulo 9, Escenarios A y B; Proposición 7.7). La compensación es distinta. Aceptar un riesgo solo tiene sentido antes de exponerse a él, de modo que una compensación cuenta desde el momento en que se registra, y una registrada a posteriori se marca como retroactiva (OD-6). Esto no prescribe un orden de actividades. Reconoce que aceptar un riesgo es en sí mismo un acto situado en el tiempo.
 
 ## 5.5 Resumen
 La ortogonalidad hace que el método sea aplicable en equipos, dominios y procesos distintos porque evalúa el estado de ingeniería en lugar de la secuencia de actividades. Permite reconstrucción posterior al fallo al permitir evaluar responsabilidad incluso cuando el trabajo original fue no lineal. Esto es lo que permite que el método sea universal sin volverse prescriptivo sobre el flujo de trabajo.

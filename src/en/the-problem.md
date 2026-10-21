@@ -21,9 +21,11 @@ The consequences of implicit reasoning include:
 
 Given the core problem, the hypothesis follows: if engineering reasoning is made explicit and enforceable, independent of process or workflow, then software outcomes can be evaluated as engineered products and failures can be diagnosed with accountability rather than narrative.
 
+This is a hypothesis. This manuscript argues for it and defines the means to evaluate it: obligations, evaluation semantics and worked examples. It does not report empirical evidence that applying the method improves outcomes. Statements elsewhere about what the method improves are expectations derived from the hypothesis, not demonstrated results.
+
 ## 0.4 Objective
 
-The objective is to define a minimal, normative, process-orthogonal method that specifies obligations and consequences and makes engineering work objectively evaluable.
+The objective is to define a minimal, normative, process-orthogonal method that specifies obligations and consequences and makes engineering work evaluable against an explicitly declared context, with results that can be reproduced from the same evidence and contested on the same terms.
 
 ## 0.5 Scope and Non-Objectives
 

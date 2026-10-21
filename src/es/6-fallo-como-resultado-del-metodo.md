@@ -1,4 +1,4 @@
-﻿# 6. El fallo como resultado del método
+# 6. El fallo como resultado del método
 
 Los sistemas complejos fallan. Esto no es una anomalía; es una constante. El método no pretende eliminar el fallo. Pretende hacer que el fallo sea diagnosticable como evidencia de ingeniería y no como un artefacto narrativo.
 
@@ -32,7 +32,7 @@ En otro caso, un defecto en etapa final se atribuye a "cambios apresurados". La 
 
 ## 6.4 Responsabilidad a nivel de método
 
-Cuando un sistema falla, la responsabilidad puede evaluarse al nivel del método: si se declaró y comprendió la intención, si las decisiones fueron explícitas y justificadas, si los supuestos se identificaron y se siguieron, si la validación correspondió al riesgo, si las compensaciones fueron explícitas y si los parámetros contextuales fueron realistas. Si estas preguntas no pueden responderse, el método no se aplicó plenamente. El fallo, en ese caso, no es misterioso; es esperable.
+Cuando un sistema falla, la responsabilidad puede evaluarse al nivel del método: si se declaró y comprendió la intención, si las decisiones fueron explícitas y justificadas, si los supuestos se identificaron y se siguieron, si la validación correspondió al riesgo, si las compensaciones fueron explícitas y si los parámetros contextuales fueron realistas. Si estas preguntas no pueden responderse a partir del registro, el método no se aplicó plenamente. El fallo, en ese caso, no es misterioso: ocurrió en un sistema cuyo razonamiento no estaba disponible para su inspección.
 
 Esto no implica negligencia. Indica dónde el registro de ingeniería estuvo incompleto y dónde las obligaciones no se cumplieron o se aceptaron sin compensación explícita. El método hace visible esa brecha para poder evaluarla y corregirla.
 
@@ -44,7 +44,22 @@ Porque el fallo se vuelve explicable, se vuelve reutilizable. Los equipos pueden
 
 ---
 
-## 6.6 Resumen
+## 6.6 Límites de la diagnosabilidad
+
+La diagnosabilidad tiene límites, y el método los declara en lugar de ocultarlos.
+
+- **El método no encuentra causas.** Los factores causales provienen del análisis de incidentes, la depuración o la investigación. El método relaciona esos factores con el registro de ingeniería y declara qué explica el registro, qué aceptó como riesgo y qué no puede explicar (7.7).
+- **No todo fallo tiene una causa a nivel de método.** Fallos de hardware, incidentes de proveedores y otros factores externos pueden causar fallos en sistemas cuyo registro de ingeniería está completo. Un fallo que materializa un riesgo aceptado mediante una compensación válida, o una premisa declarada como supuesto, es el método funcionando, no fallando. La redacción 0.2.1 de la Regla 8 no distingue estos casos; el capítulo 3.8 propone una interpretación que sí lo hace (OD-1).
+- **La evidencia puede faltar o ser inaccesible.** Cuando el registro no puede decidir una cuestión, el diagnóstico lo dice. Una pregunta sin respuesta se informa como indeterminada, no se resuelve con narrativa.
+- **Las investigaciones pueden estar incompletas.** Un factor que todavía es una hipótesis, o cuyo lugar en el sistema aún no se conoce, dice algo sobre el estado del análisis, no sobre el registro. Deja el diagnóstico indeterminado y no deja violada ninguna obligación. Solo un factor establecido, que actúa dentro del alcance y que no puede relacionarse con ningún elemento de un registro declarado completo, muestra que el registro era insuficiente (3.8, OD-1).
+- **La retrospectiva distorsiona el juicio.** Después de un fallo, las decisiones parecen peores y los riesgos más evidentes de lo que eran [Fischhoff 1975; Dekker 2006]. Juzgar una decisión como inválida debe apoyarse en el registro disponible cuando se tomó.
+- **El diagnóstico no es exhaustivo.** Relacionar los factores identificados con el registro no demuestra que se identificaran todos los factores, ni que alguno de ellos fuera suficiente.
+
+Dentro de estos límites, la afirmación de este capítulo se mantiene: donde el registro existe, el fallo puede explicarse en términos de ingeniería; donde no existe, su ausencia es en sí misma el hallazgo.
+
+---
+
+## 6.7 Resumen
 
 El fallo es inevitable; la opacidad es opcional. El método no dicta cómo trabajan los equipos, pero sí qué debe ser explícito para que el trabajo sea ingeniería. Cuando ocurre un fallo, debe ser explicable en términos del método; la madurez de ingeniería crece a partir de fallos diagnosticados, no de fallos evitados.
 

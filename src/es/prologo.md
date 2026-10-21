@@ -1,4 +1,4 @@
-﻿# Prólogo - Contexto y motivación
+# Prólogo - Contexto y motivación
 
 La mayoría de los ingenieros ha visto sistemas que funcionan y aun así se sienten frágiles. Todo compila, se despliega y pasa pruebas, y sin embargo el código parece depender de un puñado de decisiones no escritas y de expectativas frágiles. Los cambios se integran con confianza, hasta que no, y la razón es difícil de expresar sin reconstruir el pasado de memoria.
 

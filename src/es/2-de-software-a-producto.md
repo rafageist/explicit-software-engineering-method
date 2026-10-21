@@ -1,4 +1,4 @@
-﻿# 2. De software a producto de software
+# 2. De software a producto de software
 
 El software y los productos de software no son equivalentes. El software consiste en código ejecutable, configuraciones y datos que producen comportamiento. Un producto de software es el resultado de la ingeniería: software cuyo comportamiento, restricciones y propósito pueden explicarse, validarse y justificarse. Este capítulo se centra en la diferencia entre funcionalidad que funciona y resultados de ingeniería responsables.
 

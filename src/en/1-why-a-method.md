@@ -23,6 +23,6 @@ This approach is not a rejection of Agile, Scrum, RUP, or any other organization
 The separation is practical: organizational choices optimize coordination, while engineering accountability requires a stable basis for evaluation regardless of coordination style.
 
 ## 1.5 Method as Evaluative Function
-At its core, a method can act as an evaluative function: given engineering artifacts and context, it can determine whether obligations were met and where accountability is missing. This perspective motivates a method over process and prepares the ground for distinguishing software that merely works from software that qualifies as an engineered product.
+At its core, a method can act as an evaluative function: given engineering artifacts and an explicitly declared context, it can determine whether obligations were met, where accountability is missing, and where the available evidence is insufficient to decide. This perspective motivates a method over process and prepares the ground for distinguishing software that merely works from software that qualifies as an engineered product.
 
 Taken together, these points show why a method is the correct abstraction: it preserves accountability across different ways of organizing work and makes engineering outcomes evaluable. With that foundation, the next step is to clarify the boundary between software that functions and software that qualifies as an engineered product.

@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import argparse
 import os
@@ -11,13 +11,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-AUTHOR = "Rafael Rodr\u00edguez Ram\u00edrez"
+AUTHOR = "Rafael Rodríguez Ramírez"
 
 DOCS_ROOT = ROOT / "src"
 COVER_ART_FALLBACK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="
 
 LANG_CONFIG = {
     "en": {
+        "lang": "en-US",
         "title": "Explicit Software Engineering Method",
         "subtitle": "A normative method for engineering accountability, traceability, and diagnosable failure",
         "cover_template": "00-cover.html",
@@ -25,7 +26,6 @@ LANG_CONFIG = {
         "contents_file": "00-contents.md",
         "index_file": "00-index.md",
         "index_title": "Index",
-        "include_index": True,
         "header_tex": "pandoc-header.tex",
         "chapters": [
             "prologue.md",
@@ -37,22 +37,26 @@ LANG_CONFIG = {
             "5-orthogonality.md",
             "6-failure-as-a-method-outcome.md",
             "7-formalization.md",
+            "8-application-and-evaluation.md",
+            "9-worked-examples.md",
+            "10-engineering-context.md",
+            "references.md",
             "glossary.md",
         ],
         "pdf_basename": "Explicit-Software-Engineering-Method",
     },
     "es": {
-        "title": "M\u00e9todo Expl\u00edcito de Ingenier\u00eda de Software",
+        "lang": "es",
+        "title": "Método Explícito de Ingeniería de Software",
         "subtitle": (
-            "Un m\u00e9todo normativo para la responsabilidad ingenieril, "
+            "Un método normativo para la responsabilidad ingenieril, "
             "la trazabilidad y el fallo diagnosticable"
         ),
         "cover_template": "00-portada.html",
         "cover_art": "portada.png",
         "contents_file": "00-contenidos.md",
         "index_file": "00-indice.md",
-        "index_title": "\u00cdndice",
-        "include_index": False,
+        "index_title": "Índice",
         "header_tex": "pandoc-header-es.tex",
         "chapters": [
             "prologo.md",
@@ -64,6 +68,10 @@ LANG_CONFIG = {
             "5-ortogonalidad.md",
             "6-fallo-como-resultado-del-metodo.md",
             "7-formalizacion.md",
+            "8-aplicacion-y-evaluacion.md",
+            "9-ejemplos-desarrollados.md",
+            "10-contexto-de-ingenieria.md",
+            "referencias.md",
             "glosario.md",
         ],
         "pdf_basename": "Metodo-Explicito-de-Ingenieria-de-Software",
@@ -72,6 +80,8 @@ LANG_CONFIG = {
 SUPPORTED_LANGS = tuple(LANG_CONFIG.keys())
 
 HEADING_RE = re.compile(r"^(#{1,3})\s+(.*)$")
+FENCE_RE = re.compile(r"^(```|~~~)")
+MISSING_CHAR_RE = re.compile(r"Missing character", re.IGNORECASE)
 
 
 def read_manifest_version() -> str:
@@ -98,18 +108,36 @@ def sanitize_version(version: str) -> str:
     return "".join(ch if (ch.isalnum() or ch in "._-") else "_" for ch in version)
 
 
-def generate_index(
-    doc_root: Path,
-    chapters: list[str],
-    index_file: str,
-    index_title: str,
-) -> None:
+def build_timestamp() -> datetime:
+    """Use SOURCE_DATE_EPOCH, else the commit time of HEAD, else the current time."""
+    epoch = os.environ.get("SOURCE_DATE_EPOCH")
+    if not epoch:
+        try:
+            epoch = subprocess.run(
+                ["git", "log", "-1", "--format=%ct"],
+                cwd=ROOT,
+                check=True,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
+        except (OSError, subprocess.CalledProcessError):
+            epoch = ""
+    if epoch:
+        return datetime.fromtimestamp(int(epoch), tz=timezone.utc)
+    return datetime.now(timezone.utc)
+
+
+def render_index(doc_root: Path, chapters: list[str], index_title: str) -> str:
     lines = [f"# {index_title}", ""]
     for chapter in chapters:
-        path = doc_root / chapter
-        text = path.read_text(encoding="utf-8")
+        text = (doc_root / chapter).read_text(encoding="utf-8")
+        in_fence = False
         for line in text.splitlines():
-            line = line.lstrip("\ufeff")
+            if FENCE_RE.match(line):
+                in_fence = not in_fence
+                continue
+            if in_fence:
+                continue
             match = HEADING_RE.match(line)
             if not match:
                 continue
@@ -121,7 +149,22 @@ def generate_index(
             else:
                 lines.append(f"{indent}- {title}")
         lines.append("")
-    (doc_root / index_file).write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def sync_index(lang: str, write: bool) -> bool:
+    """Return True if the committed index matches the chapters; optionally rewrite it."""
+    config = LANG_CONFIG[lang]
+    doc_root = language_root(lang)
+    expected = render_index(doc_root, config["chapters"], config["index_title"])
+    index_path = doc_root / config["index_file"]
+    current = index_path.read_text(encoding="utf-8") if index_path.is_file() else ""
+    if current == expected:
+        return True
+    if write:
+        index_path.write_text(expected, encoding="utf-8")
+        return True
+    return False
 
 
 def require_command(command: str) -> None:
@@ -209,17 +252,28 @@ def language_root(lang: str) -> Path:
     return DOCS_ROOT / lang
 
 
-def build_pdf_for_language(lang: str) -> None:
+def run_pandoc(cmd: list[str], env: dict[str, str]) -> None:
+    """Run pandoc, echo its diagnostics, and fail on glyphs missing from the PDF fonts."""
+    result = subprocess.run(cmd, env=env, capture_output=True, text=True)
+    sys.stderr.write(result.stderr)
+    if result.returncode != 0:
+        raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
+    missing = [line for line in result.stderr.splitlines() if MISSING_CHAR_RE.search(line)]
+    if missing:
+        raise RuntimeError(
+            "Characters missing from the PDF fonts:\n" + "\n".join(sorted(set(missing)))
+        )
+
+
+def build_for_language(lang: str, output_format: str) -> None:
     config = LANG_CONFIG[lang]
     doc_root = language_root(lang)
     if not doc_root.is_dir():
         raise FileNotFoundError(f"Missing language directory: {doc_root}")
-    generate_index(
-        doc_root,
-        config["chapters"],
-        config["index_file"],
-        config["index_title"],
-    )
+    if not sync_index(lang, write=False):
+        raise RuntimeError(
+            f"{config['index_file']} is out of date; run: python scripts/build_pdf.py --write-index"
+        )
 
     output_root = ROOT / "build"
     output_root.mkdir(exist_ok=True)
@@ -227,37 +281,18 @@ def build_pdf_for_language(lang: str) -> None:
     output_dir.mkdir(exist_ok=True)
     raw_version = read_manifest_version()
     version = sanitize_version(raw_version)
-    output_pdf = output_root / f"{config['pdf_basename']}_{version}.pdf"
+    output_file = output_root / f"{config['pdf_basename']}_{version}.{output_format}"
     header_tex = ROOT / "scripts" / config.get("header_tex", "pandoc-header.tex")
 
-    generated_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+    generated_at = build_timestamp().strftime("%Y-%m-%d %H:%M UTC")
 
     env = os.environ.copy()
-    mermaid_binary(env)
-    art_image = resolve_cover_art(output_dir, doc_root, config["cover_art"])
-    cover_html = output_dir / config["cover_template"]
-    generate_cover_html(
-        doc_root / config["cover_template"],
-        config["title"],
-        config["subtitle"],
-        raw_version,
-        generated_at,
-        art_image,
-        cover_html,
-    )
-    cover_pdf = output_dir / "00-cover.pdf"
-    render_cover_pdf(cover_html, cover_pdf)
-    cover_include = output_dir / "00-cover.tex"
-    write_cover_include_tex(cover_include, cover_pdf)
-
     resource_path = os.pathsep.join([str(doc_root), str(ROOT)])
     cmd = [
         "pandoc",
         "--from",
         "markdown+tex_math_dollars+raw_tex",
         "--standalone",
-        "--include-before-body",
-        str(cover_include),
         "--pdf-engine=xelatex",
         "--metadata",
         f"title={config['title']}",
@@ -265,26 +300,42 @@ def build_pdf_for_language(lang: str) -> None:
         f"author={AUTHOR}",
         "--metadata",
         f"date={generated_at}",
+        "--metadata",
+        f"lang={config['lang']}",
         "--include-in-header",
         str(header_tex),
-        "--filter",
-        "pandoc-mermaid",
+        "--lua-filter",
+        str(ROOT / "scripts" / "glossary-columns.lua"),
         "--resource-path",
         resource_path,
-        "-o",
-        str(output_pdf),
     ]
 
-    cmd.append(str(doc_root / config["contents_file"]))
-    if config.get("include_index", True):
-        cmd.append(str(doc_root / config["index_file"]))
+    if output_format == "pdf":
+        mermaid_binary(env)
+        art_image = resolve_cover_art(output_dir, doc_root, config["cover_art"])
+        cover_html = output_dir / config["cover_template"]
+        generate_cover_html(
+            doc_root / config["cover_template"],
+            config["title"],
+            config["subtitle"],
+            raw_version,
+            generated_at,
+            art_image,
+            cover_html,
+        )
+        cover_pdf = output_dir / "00-cover.pdf"
+        render_cover_pdf(cover_html, cover_pdf)
+        cover_include = output_dir / "00-cover.tex"
+        write_cover_include_tex(cover_include, cover_pdf)
+        cmd += ["--include-before-body", str(cover_include), "--filter", "pandoc-mermaid"]
 
+    cmd += ["-o", str(output_file), str(doc_root / config["contents_file"])]
     cmd += [str(doc_root / chapter) for chapter in config["chapters"]]
 
-    subprocess.run(cmd, check=True, env=env)
+    run_pandoc(cmd, env)
 
 
-def parse_args() -> list[str]:
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build PDFs for the method documentation.")
     parser.add_argument(
         "--lang",
@@ -292,13 +343,29 @@ def parse_args() -> list[str]:
         choices=SUPPORTED_LANGS,
         help="Language to build. Repeatable. Defaults to all supported languages.",
     )
-    args = parser.parse_args()
-    return args.lang or list(SUPPORTED_LANGS)
+    parser.add_argument(
+        "--format",
+        choices=("pdf", "tex"),
+        default="pdf",
+        help="Output format. 'tex' skips the cover and Mermaid rendering (for quick checks).",
+    )
+    parser.add_argument(
+        "--write-index",
+        action="store_true",
+        help="Regenerate the Markdown index files from chapter headings and exit.",
+    )
+    return parser.parse_args()
 
 
 def main() -> None:
-    for lang in parse_args():
-        build_pdf_for_language(lang)
+    args = parse_args()
+    langs = args.lang or list(SUPPORTED_LANGS)
+    if args.write_index:
+        for lang in langs:
+            sync_index(lang, write=True)
+        return
+    for lang in langs:
+        build_for_language(lang, args.format)
 
 
 if __name__ == "__main__":
